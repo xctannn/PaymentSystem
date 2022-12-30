@@ -58,6 +58,9 @@ class EmployeeProfile(models.Model):
     position = models.CharField(max_length=20, choices=Position.choices)
     department = models.CharField(max_length=50, choices=Department.choices, blank=True)
 
+    def __str__(self):
+        return self.user
+
 
 class Vendor(User):
     base_role = User.Role.VENDOR
@@ -71,6 +74,9 @@ class VendorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     address = models.TextField()
+    
+    def __str__(self):
+        return self.user
 
 
 # @receiver(post_save, sender=Employee)
