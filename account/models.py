@@ -59,7 +59,7 @@ class EmployeeProfile(models.Model):
     department = models.CharField(max_length=50, choices=Department.choices, blank=True)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class Vendor(User):
@@ -76,7 +76,7 @@ class VendorProfile(models.Model):
     address = models.TextField()
     
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 # @receiver(post_save, sender=Employee)
