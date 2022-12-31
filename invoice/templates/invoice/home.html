@@ -1,0 +1,36 @@
+{% extends 'invoice/base.html' %}
+{% load static %}
+
+{% block invoice %}
+<div class="m-5">
+  <h5 class="m-3 font-weight-bold">Invoices to be Approved</h5>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm" cellspacing="0">
+        <thead class="bg-table-gray">
+            <tr>
+              <th class="text-center">Invoice ID</th>
+              <th class="text-center">Vendor Name</th>
+              <th class="text-center">Uploader</th>
+              <th class="text-center">Amount Owned</th>
+              <th class="text-center">Issued date</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for invoice in invoices %} <!-- Looping through items in list which was in view's context -->
+            <tr>
+              <td class="text-center">
+                <a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark"> <!-- Goes to invoice's details page when it is clicked -->
+                  {{invoice.invoice_id}}
+                </a>
+              </td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.get_vendor_name}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.get_uploader_name}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owned}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.date}}</a></td>
+            </tr>                
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+{% endblock %}
