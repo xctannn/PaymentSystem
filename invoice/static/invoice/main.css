@@ -1,0 +1,32 @@
+body {
+	background: #dddad5;
+	color: #1a2930;
+	margin-top: 5rem;
+	font-weight: 500;
+}
+
+.bg-table-gray {
+	background-color:#505050;
+	color: #dddad5;
+}
+
+.bg-nav-gray {
+    background-color: #6b6b6e;
+}
+
+a:active{
+	color: #f7ce3e;
+}
+
+.nav-link:focus{
+	color: #f7ce3e;
+}
+
+.navbar-nav > .active > a{
+	color: #f7ce3e;
+}
+
+.nav-link.active {
+	font-weight: 500;
+	color: #f7ce3e;
+}
