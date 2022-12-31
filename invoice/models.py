@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import EmployeeProfile, VendorProfile
+import datetime
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
@@ -24,6 +25,7 @@ class Invoice(models.Model):
     department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
     first_CFO_Approved = models.BooleanField(default=False)
     second_CFO_Approved = models.BooleanField(default=False)
+    approved_date = models.DateField(null=True)
 
     @property
     def get_uploader_name(self):
@@ -39,6 +41,9 @@ class Invoice(models.Model):
 
     def set_department(self):
         self.department = self.uploader.department
+
+    def set_approved_date(self):
+        self.approved_date = datetime.date.today()
 
     def __str__(self):
         return self.invoice_id
