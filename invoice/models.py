@@ -1,5 +1,6 @@
 from django.db import models
 from account.models import EmployeeProfile, VendorProfile
+import datetime
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
@@ -22,8 +23,9 @@ class Invoice(models.Model):
     amount_owned = models.DecimalField(max_digits=10, decimal_places=2)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING)
     department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
-    first_CFO_Approved = models.BooleanField(default=False)
-    second_CFO_Approved = models.BooleanField(default=False)
+    first_CFO_approved = models.BooleanField(default=False)
+    second_CFO_approved = models.BooleanField(default=False)
+    approved_date = models.DateField(null=True)
 
     @property
     def get_uploader_name(self):
@@ -34,11 +36,32 @@ class Invoice(models.Model):
         return self.vendor.name
 
     @property
+    def get_vendor_address(self):
+        return self.vendor.address
+
+    @property
     def get_item_list(self):
         return (self.item.all())
 
     def set_department(self):
         self.department = self.uploader.department
+
+    def set_approved_date(self):
+        self.approved_date = datetime.date.today()
+
+    def set_first_CFO_approve(self):
+        self.first_CFO_approved = True
+    
+    def set_second_CFO_approve(self):
+        self.second_CFO_approved = True
+
+    def get_first_CFO_name(self):
+        CFO = EmployeeProfile.objects.filter(position='CFO').first()
+        return CFO.first_name + " " + CFO.last_name
+
+    def get_second_CFO_name(self):
+        CFO = EmployeeProfile.objects.filter(position='CFO').last()
+        return CFO.first_name + " " + CFO.last_name
 
     def __str__(self):
         return self.invoice_id
