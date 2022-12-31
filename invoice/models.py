@@ -18,9 +18,10 @@ class Invoice(models.Model):
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     item = models.ManyToManyField(Item)
     amount_charged = models.DecimalField(max_digits=10, decimal_places=2)
-    tax = models.IntegerField(blank=True)
+    tax = models.IntegerField(null=True)
     amount_owned = models.DecimalField(max_digits=10, decimal_places=2)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING)
+    department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
     first_CFO_Approved = models.BooleanField(default=False)
     second_CFO_Approved = models.BooleanField(default=False)
 
@@ -35,6 +36,9 @@ class Invoice(models.Model):
     @property
     def get_item_list(self):
         return (self.item.all())
+
+    def set_department(self):
+        self.department = self.uploader.department
 
     def __str__(self):
         return self.invoice_id
