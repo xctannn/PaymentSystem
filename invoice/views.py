@@ -1,13 +1,15 @@
 from django.shortcuts import render
-<<<<<<<<< Temporary merge branch 1
-
-# Create your views here.
-=========
-# Create your views here.
+from django.views.generic import ListView, DetailView
+from .models import Invoice
 
 def home(request):
     return render(request, 'invoice/home.html')
->>>>>>>>> Temporary merge branch 2
+
+class InvoiceListView(ListView):
+    model = Invoice
+    template_name = 'invoice/home.html'
+    context_object_name = 'invoices'
+    ordering = ['-date']  #order by date
 
 class InvoiceDetailView(DetailView):
     model = Invoice
