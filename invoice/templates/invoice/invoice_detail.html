@@ -1,6 +1,6 @@
 {% extends 'invoice/base.html' %}
 {% load static %}
-{% block detail %}
+{% block content %}
 <div class="card mx-auto w-75 bg-light">
     <div class="card-body">
     <legend class="d-inline">Invoice {{ object.invoice_id }}</legend> 
@@ -36,7 +36,7 @@
             <tr>
                 <td></td>
                 <td></td>
-                <th>Amount Charged</th>
+                <th>Subtotal</th>
                 <td>{{ object.amount_charged }}</td>
                 </tr>
             </tr>
