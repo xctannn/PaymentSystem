@@ -1,7 +1,7 @@
 {% extends 'invoice/base.html' %}
 {% load static %}
 
-{% block invoice %}
+{% block content %}
 <!-- Unapproved Invoice Table -->
 <div class="m-5">
   <h5 class="m-3 font-weight-bold">Invoices to be Approved</h5>
@@ -73,8 +73,8 @@
 </div>
 <div class="fixed-bottom mt-4 mb-2 mr-2" style='background-color:transparent'>
   <div>
-    <button type="button" class="button button-yellow text-center font-weight-bold float-right py-2 px-3 border-0 ">
+    <a class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" href="{% url 'invoice-create' %}">
       New Invoice
-    </button>
+    </a>
 </div>
 {% endblock %}
