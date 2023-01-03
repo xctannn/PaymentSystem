@@ -74,4 +74,4 @@ class VendorProfile(models.Model):
     address = models.TextField()
     
     def __str__(self):
-        return str(self.user)
+        return self.name
