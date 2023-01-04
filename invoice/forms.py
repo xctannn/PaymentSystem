@@ -17,7 +17,6 @@ class UploadInvoiceForm(forms.ModelForm):
             'uploader',
         ]
 
-        # Styling form
         labels = {
             'invoice_id': 'Invoice ID ',
             'date': "Date ",
@@ -39,7 +38,9 @@ class UploadInvoiceForm(forms.ModelForm):
             'uploader' : forms.Select(attrs={'class' : 'form-control'}),
         }
 
+
 class AddItemForm(forms.ModelForm):
+    
     class Meta:
         model = Item
 
@@ -62,4 +63,37 @@ class AddItemForm(forms.ModelForm):
             'unit_price' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'quantity' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'total_price' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+        }
+
+
+class UpdateInvoiceForm(forms.ModelForm):
+
+    class Meta:
+        model = Invoice
+    
+        fields = [
+            'date',
+            'due_date',
+            'vendor',
+            'amount_charged',
+            'tax',
+            'amount_owned',
+        ]
+
+        labels = {
+            'date': "Date ",
+            'due_date': 'Due Date ',
+            'vendor': 'Vendor ',
+            'amount_charged': 'Subtotal ',
+            'tax': 'Tax (%) ',
+            'amount_owned': 'Amount Owned ',
+        }
+
+        widgets = { 
+            'date' : forms.NumberInput(attrs={'type': 'date'}),
+            'due_date' : forms.NumberInput(attrs={'type': 'date'}),
+            'vendor' : forms.Select(attrs={'class' : 'form-control'}),
+            'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+            'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+            'amount_owned' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
         }
