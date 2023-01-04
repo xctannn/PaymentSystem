@@ -3,68 +3,79 @@
 {% block content %}
 <div class="card mx-auto w-75 bg-light">
     <div class="card-body">
-    <legend class="d-inline">Invoice {{ object.invoice_id }}</legend> 
-        <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
-            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-        </a>
-    <p class= "text-muted">{{ object.department }} Department</p>
-    <hr>
-    <p>Issued Date: {{ object.date }}</p>
-    <p>Due Date : {{ object.due_date }}</p>
-    <p>Vendor : {{ object.get_vendor_name }}</p>
-    <pre>         {{ object.get_vendor_address }}</pre>
+        <legend class="d-inline">Invoice {{ object.invoice_id }}</legend> 
+            <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+                <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+            </a>
+        <p class= "text-muted">{{ object.department }} Department</p>
+        <hr>
+        <p>Issued Date: {{ object.date }}</p>
+        <p>Due Date : {{ object.due_date }}</p>
+        <p>Vendor : {{ object.get_vendor_name }}</p>
+        <pre>         {{ object.get_vendor_address }}</pre>
 
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Unit Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in object.get_item_list %}
+        <table class="table">
+            <thead>
                 <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.unit_price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.total_price }}</td>
+                <th scope="col">Item</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Price</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for item in object.get_item_list %}
+                    <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.unit_price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.total_price }}</td>
+                    </tr>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Subtotal</th>
+                    <td>{{ object.amount_charged }}</td>
+                    </tr>
                 </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td></td>
-                <th>Subtotal</th>
-                <td>{{ object.amount_charged }}</td>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Tax (%)</th>
+                    <td>{{ object.tax }}</td>
+                    </tr>
                 </tr>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <th>Tax (%)</th>
-                <td>{{ object.tax }}</td>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>Amount Owned</th>
+                    <td>{{ object.amount_owned }}</td>
+                    </tr>
                 </tr>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <th>Amount Owned</th>
-                <td>{{ object.amount_owned }}</td>
-                </tr>
-            </tr>
-        </tbody>
-    </table>
-    <small><i>Uploaded by {{ object.get_uploader_name }}</i></small><br>
+            </tbody>
+        </table>
+        <small><i>Uploaded by {{ object.get_uploader_name }}</i></small><br>
 
-    {% if object.first_CFO_approved %}
-        <small>Approved by {{object.get_first_CFO_name }}</small><br>
-    {% endif %}
-    {% if object.second_CFO_approved %}
-        <small>Approved by {{object.get_second_CFO_name }}</small><br>
-    {% endif %}  
-
+        {% if object.first_CFO_approved %}
+            <small>Approved by {{object.get_first_CFO_name }}</small><br>
+        {% endif %}
+        {% if object.second_CFO_approved %}
+            <small>Approved by {{object.get_second_CFO_name }}</small><br>
+        {% endif %}
     </div>
+</div>
+<div class="text-center m-3 form-group">
+    {% if object.first_CFO_approved == False and object.second_CFO_approved == False %}
+        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit' object.pk %}"> 
+            Edit 
+        </a>
+    {% endif %}
+    {% if object.first_CFO_approved == False or object.second_CFO_approved == False %}
+        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2"> 
+            Approve Payment 
+        </a>
+    {% endif %}
 </div>
 {% endblock %}
