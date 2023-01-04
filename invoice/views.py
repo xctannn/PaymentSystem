@@ -34,8 +34,11 @@ class InvoiceCreateView(TemplateView):
         
         if upload_invoice_form.is_valid():
             upload_invoice_form.save()
+            added_invoice = Invoice.objects.last()
+            added_invoice.set_department()
             context = {
                 'AddItemForm': AddItemForm(),
+                'added_invoice': added_invoice,
             }
             return render(request, self.template_name, context)
             
@@ -44,11 +47,12 @@ class InvoiceCreateView(TemplateView):
             unit_price = add_item_form.cleaned_data['unit_price']
             quantity = add_item_form.cleaned_data['quantity']
             total_price = add_item_form.cleaned_data['total_price']
-            invoice_item = Invoice.objects.last()
-            item = Item.objects.create(invoice = invoice_item, name = name, unit_price = unit_price, quantity = quantity, total_price = total_price)
+            added_invoice = Invoice.objects.last()
+            item = Item.objects.create(invoice = added_invoice, name = name, unit_price = unit_price, quantity = quantity, total_price = total_price)
             item.save()
             context = {
                 'AddItemForm': AddItemForm(),
                 'UploadButton': 'UploadButton',
+                'added_invoice': added_invoice,
             }
             return render(request, self.template_name, context)
