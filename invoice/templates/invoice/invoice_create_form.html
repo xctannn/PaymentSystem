@@ -46,73 +46,73 @@
 </div>
 
 {% if added_invoice %}
-<div class="card mx-auto w-75 bg-light">
-  <div class="card-body">
-  <legend class="d-inline">Invoice {{ added_invoice.invoice_id }}</legend>
-    {% if UploadButton %}
-      <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
-          <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
-      </a>
-    {% endif %} 
-  <p class= "text-muted">{{ added_invoice.department }} Department</p>
-  <hr>
-  <p>Issued Date: {{ added_invoice.date }}</p>
-  <p>Due Date : {{ added_invoice.due_date }}</p>
-  <p>Vendor : {{ added_invoice.get_vendor_name }}</p>
-  <pre>         {{ added_invoice.get_vendor_address }}</pre>
+  <div class="card mx-auto w-75 bg-light">
+    <div class="card-body">
+    <legend class="d-inline">Invoice {{ added_invoice.invoice_id }}</legend>
+      {% if UploadButton %}
+        <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+        </a>
+      {% endif %} 
+    <p class= "text-muted">{{ added_invoice.department }} Department</p>
+    <hr>
+    <p>Issued Date: {{ added_invoice.date }}</p>
+    <p>Due Date : {{ added_invoice.due_date }}</p>
+    <p>Vendor : {{ added_invoice.get_vendor_name }}</p>
+    <pre>         {{ added_invoice.get_vendor_address }}</pre>
 
-  <table class="table">
-      <thead>
-          <tr>
-          <th scope="col">Item</th>
-          <th scope="col">Unit Price</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Total Price</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for item in added_invoice.get_item_list %}
-              <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ item.unit_price }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>{{ item.total_price }}</td>
-              </tr>
-              </tr>
-          {% endfor %}
-          <tr>
-              <td></td>
-              <td></td>
-              <th>Subtotal</th>
-              <td>{{ added_invoice.amount_charged }}</td>
-              </tr>
-          </tr>
-          <tr>
-              <td></td>
-              <td></td>
-              <th>Tax (%)</th>
-              <td>{{ added_invoice.tax }}</td>
-              </tr>
-          </tr>
-          <tr>
-              <td></td>
-              <td></td>
-              <th>Amount Owned</th>
-              <td>{{ added_invoice.amount_owned }}</td>
-              </tr>
-          </tr>
-      </tbody>
-  </table>
-  <small><i>Uploaded by {{ added_invoice.get_uploader_name }}</i></small><br>
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in added_invoice.get_item_list %}
+                <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }}</td>
+                </tr>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Subtotal</th>
+                <td>{{ added_invoice.amount_charged }}</td>
+                </tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Tax (%)</th>
+                <td>{{ added_invoice.tax }}</td>
+                </tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Amount Owned</th>
+                <td>{{ added_invoice.amount_owned }}</td>
+                </tr>
+            </tr>
+        </tbody>
+    </table>
+    <small><i>Uploaded by {{ added_invoice.get_uploader_name }}</i></small><br>
 
-  {% if added_invoice.first_CFO_approved %}
-      <small>Approved by {{added_invoice.get_first_CFO_name }}</small><br>
-  {% endif %}
-  {% if added_invoice.second_CFO_approved %}
-      <small>Approved by {{added_invoice.get_second_CFO_name }}</small><br>
-  {% endif %}  
+    {% if added_invoice.first_CFO_approved %}
+        <small>Approved by {{added_invoice.get_first_CFO_name }}</small><br>
+    {% endif %}
+    {% if added_invoice.second_CFO_approved %}
+        <small>Approved by {{added_invoice.get_second_CFO_name }}</small><br>
+    {% endif %}  
 
+    </div>
   </div>
-</div>
 {% endif %}  
 {% endblock %}
