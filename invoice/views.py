@@ -1,11 +1,7 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView, UpdateView
 from .models import Invoice, Item
-from .forms import UploadInvoiceForm, AddItemForm
-
-def home(request):
-    return render(request, 'invoice/home.html')
-
+from .forms import UploadInvoiceForm, AddItemForm, UpdateInvoiceForm
 
 class InvoiceListView(ListView):
     model = Invoice
@@ -19,7 +15,7 @@ class InvoiceDetailView(DetailView):
 
 
 class InvoiceCreateView(TemplateView):    
-    template_name = 'invoice/invoice_form.html'
+    template_name = 'invoice/invoice_create_form.html'
 
     def get(self, request):
         context = {
@@ -56,3 +52,21 @@ class InvoiceCreateView(TemplateView):
                 'added_invoice': added_invoice,
             }
             return render(request, self.template_name, context)
+
+
+def UpdateInvoice(request, pk):                                         
+    object = get_object_or_404(Invoice, pk=pk)
+    form = UpdateInvoiceForm(instance=object)                                                               
+
+    if request.method == "POST":
+        form = UpdateInvoiceForm(request.POST, instance=object)
+        if form.is_valid():
+            form.save()
+            return redirect ('item-edit', pk=pk)
+
+    context = {
+        "form": form,
+        "object": object,
+    }
+    return render(request, 'invoice/invoice_update_form.html', context)
+
