@@ -27,15 +27,19 @@ class Invoice(models.Model):
 
     def set_department(self):
         self.department = self.uploader.department
+        self.save(update_fields=["department"])
 
     def set_approved_date(self):
         self.approved_date = datetime.date.today()
+        self.save(update_fields=["approved_date"])
 
     def set_first_CFO_approve(self):
         self.first_CFO_approved = True
+        self.save(update_fields=["first_CFO_approved"])
     
     def set_second_CFO_approve(self):
         self.second_CFO_approved = True
+        self.save(update_fields=["second_CFO_approved"])
 
     def get_first_CFO_name(self):
         CFO = EmployeeProfile.objects.filter(position='CFO').first()
