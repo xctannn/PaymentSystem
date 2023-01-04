@@ -17,14 +17,11 @@
             </tr>
         </thead>
         <tbody>
-          {% for invoice in invoices %} <!-- Looping through items in list which was in view's context -->
+          {% for invoice in invoices %}
             {% if invoice.first_CFO_approved == False or invoice.second_CFO_approved == False  %}
             <tr>
-              <td class="text-center">
-                <a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark"> <!-- Goes to invoice's details page when it is clicked -->
-                  {{invoice.invoice_id}}
-                </a>
-              </td>
+              <!-- Goes to invoice's details page when it is clicked -->
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark"> {{invoice.invoice_id}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.get_vendor_name}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.department}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owned}}</a></td>
@@ -71,10 +68,9 @@
       </table>
     </div>
 </div>
-<div class="fixed-bottom mt-4 mb-2 mr-2" style='background-color:transparent'>
-  <div>
-    <a class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" href="{% url 'invoice-create' %}">
-      New Invoice
-    </a>
+<div class="fixed-bottom mx-3 my-3">
+  <a class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" href="{% url 'invoice-create' %}">
+    New Invoice
+  </a>
 </div>
 {% endblock %}
