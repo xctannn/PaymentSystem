@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'invoice.apps.InvoiceConfig',
+    'receipt.apps.AccountConfig',
     'account.apps.AccountConfig',
     'crispy_forms',
     "bootstrap5",
