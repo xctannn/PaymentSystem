@@ -1,0 +1,28 @@
+from django import forms
+from .models import Receipt
+
+class UploadReceiptForm(forms.ModelForm):
+    
+    class Meta:
+        model = Receipt
+        
+        fields = [
+            'receipt_id',
+            'date',
+            'invoice',
+            'vendor',
+        ]
+
+        labels = {
+            'receipt_id': 'Receipt ID ',
+            'date': "Date ",
+            'invoice': 'Invoice ID ',
+            'vendor': 'Vendor ',
+        }
+
+        widgets = { 
+            'receipt_id' : forms.TextInput(attrs={'class' : 'form-control'}),
+            'date' : forms.NumberInput(attrs={'type': 'date'}),
+            'invoice' : forms.Select(attrs={'class' : 'form-control'}),
+            'vendor' : forms.Select(attrs={'class' : 'form-control'}),
+        }

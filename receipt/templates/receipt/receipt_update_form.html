@@ -1,0 +1,26 @@
+{% extends "invoice/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="card mx-auto w-75 mb-4 bg-light">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4 d-inline font-weight-bold">
+                        Edit Receipt {{ object.pk }}
+                        <a href="{% url 'receipt-detail' object.pk %}" class="close float-right mr-3">
+                        <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                        </a>
+                    </legend>
+                    {{ form|crispy }}
+                </fieldset>
+                <div class="form-group float-right d-inline">                   
+                    <button class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" type="submit">
+                        Save Edit
+                    </button>                    
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
