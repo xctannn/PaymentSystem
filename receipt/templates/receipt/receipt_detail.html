@@ -3,7 +3,7 @@
 {% block content %}
 <div class="card mx-auto w-75 bg-light">
     <div class="card-body">
-        <legend class="d-inline">Receipt {{ receipt.receipt_id }}</legend> 
+        <legend class="d-inline">Receipt {{ object.receipt_id }}</legend> 
             <a href="{% url 'receipt-home' %}" class="close float-right mr-3">
                 <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
             </a>
