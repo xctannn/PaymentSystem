@@ -1,5 +1,6 @@
 {% load static %}
 {% url 'invoice-home' as invoice %}
+{% url 'receipt-home' as receipt %}
 
 <!DOCTYPE html>
 <html>
@@ -30,7 +31,7 @@
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="nav navbar-nav navbar-right">
           <a class="nav-item nav-link {% if request.path == invoice %} active {% endif %}" href="{% url 'invoice-home' %}">Invoice</a>
-          <a class="nav-item nav-link" href = "#" >Receipt</a>
+          <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'receipt-home' %}">Receipt</a>
           <a class="nav-item nav-link" href = "#" >Payment</a>
           <a class="nav-item nav-link" href = "#" >Log Out</a>
         </div> 
