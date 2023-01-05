@@ -1,0 +1,118 @@
+{% extends "invoice/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card mx-auto w-75 mb-4 bg-light">
+  <div class="card-body">
+    <form method="POST">
+      {% if UploadInvoiceForm %}
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 d-inline">
+                Add Invoice
+                <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+                    <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                </a>
+            </legend>
+            {{ UploadInvoiceForm|crispy }}
+          </table>
+        </fieldset>
+        <div class="form-group float-right d-inline">                   
+            <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" type="submit">Save and Continue</button>                 
+        </div>
+      {% endif %}
+
+      {% if AddItemForm %}
+      {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4 d-inline">
+                Add Item of the Invoice
+                <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+                    <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+                </a>
+            </legend>
+            {{ AddItemForm|crispy }}
+          </table>
+        </fieldset>
+        <div class="form-group d-inline">                   
+          <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" type="submit" name="additem">Add Item</button>             
+        </div>
+      {% endif %}
+    </form>
+      {% if UploadButton %}
+        <a class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" href="{% url 'invoice-home' %}"> Upload </a>
+      {% endif %} 
+  </div> 
+</div>
+
+{% if added_invoice %}
+  <div class="card mx-auto w-75 bg-light">
+    <div class="card-body">
+    <legend class="d-inline">Invoice {{ added_invoice.invoice_id }}</legend>
+      {% if UploadButton %}
+        <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+            <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+        </a>
+      {% endif %} 
+    <p class= "text-muted">{{ added_invoice.department }} Department</p>
+    <hr>
+    <p>Issued Date: {{ added_invoice.date }}</p>
+    <p>Due Date : {{ added_invoice.due_date }}</p>
+    <p>Vendor : {{ added_invoice.get_vendor_name }}</p>
+    <pre>         {{ added_invoice.get_vendor_address }}</pre>
+
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in added_invoice.get_item_list %}
+                <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.total_price }}</td>
+                </tr>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Subtotal</th>
+                <td>{{ added_invoice.amount_charged }}</td>
+                </tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Tax (%)</th>
+                <td>{{ added_invoice.tax }}</td>
+                </tr>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>Amount Owned</th>
+                <td>{{ added_invoice.amount_owned }}</td>
+                </tr>
+            </tr>
+        </tbody>
+    </table>
+    <small><i>Uploaded by {{ added_invoice.get_uploader_name }}</i></small><br>
+
+    {% if added_invoice.first_CFO_approved %}
+        <small>Approved by {{added_invoice.get_first_CFO_name }}</small><br>
+    {% endif %}
+    {% if added_invoice.second_CFO_approved %}
+        <small>Approved by {{added_invoice.get_second_CFO_name }}</small><br>
+    {% endif %}  
+
+    </div>
+  </div>
+{% endif %}  
+{% endblock %}

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'invoice.apps.InvoiceConfig',
     'account.apps.AccountConfig',
     'crispy_forms',
+    "bootstrap5",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
