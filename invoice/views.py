@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView, UpdateView
+from django.views.generic import ListView, DetailView, TemplateView
 from .models import Invoice, Item
 from .forms import UploadInvoiceForm, AddItemForm, UpdateInvoiceForm
 
@@ -53,10 +53,16 @@ class InvoiceCreateView(TemplateView):
             }
             return render(request, self.template_name, context)
 
+x = 0
+def getCount(object):
+    global x
+    x = (object.get_item_list()).count()
 
-def UpdateInvoice(request, pk):                                         
+
+def UpdateInvoice(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
-    form = UpdateInvoiceForm(instance=object)                                                               
+    form = UpdateInvoiceForm(instance=object)
+    getCount(object)
 
     if request.method == "POST":
         form = UpdateInvoiceForm(request.POST, instance=object)
@@ -70,3 +76,41 @@ def UpdateInvoice(request, pk):
     }
     return render(request, 'invoice/invoice_update_form.html', context)
 
+
+def UpdateItem(request, pk):
+    object = get_object_or_404(Invoice, pk=pk)
+    global x
+
+    if request.method == "POST":
+        item_object = Item.objects.get(pk = x)
+        item_object.name = ""
+        item_object.unit_price = ""
+        item_object.quantity = ""
+        item_object.total_price = ""
+        
+        form = AddItemForm(request.POST, instance=item_object)
+        x -= 1
+        if form.is_valid():
+            form.save()
+            form = AddItemForm()
+        context = {
+            "form": form,
+            "object": object,
+        }
+        if x <= 0:
+            return redirect ('invoice-detail', pk=pk)
+        return render(request, 'invoice/item_update_form.html', context)
+
+    else:
+        item_object = Item.objects.get(pk = x)
+        item_object.name = ""
+        item_object.unit_price = ""
+        item_object.quantity = ""
+        item_object.total_price = ""
+
+        form = AddItemForm(instance=item_object)
+        context = {
+            "form": form,
+            "object": object,
+        }
+        return render(request, 'invoice/item_update_form.html', context)
