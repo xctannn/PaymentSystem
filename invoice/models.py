@@ -50,7 +50,7 @@ class Invoice(models.Model):
         return CFO.first_name + " " + CFO.last_name
 
     def get_item_list(self):
-        return Item.objects.filter(invoice = self.invoice_id)
+        return Item.objects.filter(invoice = self.invoice_id).order_by('-pk')
 
     def __str__(self):
         return self.invoice_id
