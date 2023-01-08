@@ -32,14 +32,19 @@
         <div class="nav navbar-nav navbar-right">
           <a class="nav-item nav-link {% if request.path == invoice %} active {% endif %}" href="{% url 'invoice-home' %}">Invoice</a>
           <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'receipt-home' %}">Receipt</a>
-          <a class="nav-item nav-link" href = "#" >Payment</a>
-          <a class="nav-item nav-link" href = "#" >Log Out</a>
+          <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href ="{% url 'payment-home'%}">Payment</a>
+          <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href = "{% url 'logout' %}" >Log Out</a>
         </div> 
       </div>
     </nav>
   </header>
 
   <div>
+    {% comment %} {% if messages %}
+      {%for message in messages%}
+        <div class="alert alert-{{message.tags}}">
+          {{message}} {% endcomment %}
+        </div>
     {% block content %}{% endblock %}
   </div>
 </body>

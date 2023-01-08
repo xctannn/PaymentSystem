@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'invoice.apps.InvoiceConfig',
     'receipt.apps.ReceiptConfig',
     'account.apps.AccountConfig',
+    'payment.apps.PaymentConfig',
     'crispy_forms',
     "bootstrap5",
     'django.contrib.admin',
@@ -128,3 +129,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.User'
+
+LOGIN_REDIRECT_URL = 'payment-home'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
