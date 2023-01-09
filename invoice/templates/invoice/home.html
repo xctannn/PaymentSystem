@@ -12,7 +12,7 @@
               <th class="text-center">Invoice ID</th>
               <th class="text-center">Vendor Name</th>
               <th class="text-center">Department</th>
-              <th class="text-center">Amount Owned</th>
+              <th class="text-center">Amount Owed</th>
               <th class="text-center">Issued date</th>
             </tr>
         </thead>
@@ -24,7 +24,7 @@
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark"> {{invoice.invoice_id}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.get_vendor_name}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.department}}</a></td>
-              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owned}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owed}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.date}}</a></td>
             </tr>
             {% endif %}                
@@ -44,7 +44,7 @@
               <th class="text-center">Invoice ID</th>
               <th class="text-center">Vendor Name</th>
               <th class="text-center">Department</th>
-              <th class="text-center">Amount Owned</th>
+              <th class="text-center">Amount Owed</th>
               <th class="text-center">Approved date</th>
             </tr>
         </thead>
@@ -59,7 +59,7 @@
               </td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.get_vendor_name}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.department}}</a></td>
-              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owned}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.amount_owed}}</a></td>
               <td class="text-center"><a href="{% url 'invoice-detail' invoice.pk %}" class="text-dark">{{invoice.approved_date}}</a></td>
             </tr>
             {% endif %}                
