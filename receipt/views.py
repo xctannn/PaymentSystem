@@ -50,7 +50,7 @@ def UpdateReceipt(request, pk):
 class ReceiptEditListView(ListView):
     model = ReceiptEdit
     template_name = 'receipt/receipt_edit_home.html'
-    context_object_name = 'receiptEdits'
+    context_object_name = 'receipt-edits'
     ordering = ['-original_receipt_id']  #order by original receipt id
 
 class RecieptEditDetailView(DetailView):
