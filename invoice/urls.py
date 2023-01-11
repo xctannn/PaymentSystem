@@ -9,9 +9,9 @@ urlpatterns = [
     path('<pk>/', InvoiceDetailView.as_view(), name = 'invoice-detail'),
     path('<pk>/edit/', views.UpdateInvoice, name='invoice-edit'),
     path('<pk>/edit/item/', views.UpdateItem, name='item-edit'),
-    path('<pk>/requestDetail/',InvoiceEditDetailView.as_view(), name='invoice-edit-detail'),
     path('<pk>/requestEdit/', views.InvoiceEditRequest, name='invoice-edit-request'),
-    path('<pk>/requestEdit/item/', views.ItemEditRequest, name='item-edit-request'),
-    path('<pk>/approve', views.ApproveInvoiceRequestEdit, name='invoice-approve-edit'),
-
+    path('<pk>/requestDetail/',InvoiceEditDetailView.as_view(), name='invoice-edit-detail'),
+    path('<pk>/requestDetail/item/', views.ItemEditRequest, name='item-edit-request'),
+    path('<pk>/requestDetail/approve', views.ApproveInvoiceRequestEdit, name='invoice-approve-edit'),
+    path('<pk>/requestDetail/deny', views.DenyInvoiceRequestEdit, name='invoice-deny-edit'),
 ]

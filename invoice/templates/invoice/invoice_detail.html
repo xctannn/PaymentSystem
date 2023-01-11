@@ -71,9 +71,9 @@
         <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit' object.pk %}"> 
             Edit 
         </a>
-        <!-- <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit-request' object.pk %}"> 
-            Edit 
-        </a> -->
+        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit-request' object.pk %}"> 
+            Make Edit Request
+        </a>
     {% endif %}
     {% if object.first_CFO_approved == False or object.second_CFO_approved == False %}
         <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2"> 

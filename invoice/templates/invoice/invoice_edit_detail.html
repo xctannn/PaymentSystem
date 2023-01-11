@@ -4,7 +4,7 @@
 <div class="card mx-auto w-75 bg-light">
     <div class="card-body">
         <legend class="d-inline">Invoice {{ object.original_invoice_id }}</legend> 
-            <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
+            <a href="{% url 'invoice-edit-home' %}" class="close float-right mr-3">
                 <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
             </a>
         <p class= "text-muted">{{ object.get_department }} Department</p>
@@ -60,14 +60,12 @@
 
     </div>
 </div>
-<div class="text-center m-3 form-group">
-    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-approve-edit' object.pk %}"> 
-        Approve 
-    </a>
-</div>
-<div class="text-center m-3 form-group">
-    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-approve-edit' object.pk %}"> 
+<div class="text-center m-3">
+    <a class=" d-inlinebtn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'invoice-deny-edit' object.pk %}"> 
         Deny 
+    </a>
+    <a class="d-inline btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'invoice-approve-edit' object.pk %}"> 
+        Approve 
     </a>
 </div>
 {% endblock %}

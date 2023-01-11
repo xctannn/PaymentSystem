@@ -130,6 +130,7 @@ class InvoiceEditListView(ListView):
 
 class InvoiceEditDetailView(DetailView):
     model = InvoiceEdit
+    template_name = 'invoice/invoice_edit_detail.html'
 
 def InvoiceEditRequest(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
@@ -211,6 +212,17 @@ def ApproveInvoiceRequestEdit(request, pk):
 
     for item in item_edit_requests:
         item.editOriginalItem()
+        item.delete()
+    object.delete()
+
+    return redirect('invoice-edit-home')
+
+def DenyInvoiceRequestEdit(request, pk):
+    object = InvoiceEdit.objects.get(pk=pk)
+    item_edit_requests = ItemEdit.objects.filter(invoice_edit = object.pk)
+
+    for item in item_edit_requests:
+        item.delete()  
     object.delete()
 
     return redirect('invoice-edit-home')
