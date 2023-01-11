@@ -19,14 +19,12 @@
 
     </div>
 </div>
-<div class="text-center m-3 form-group">
-    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-approve-edit' object.pk %}"> 
-        Approve 
-    </a>
-</div>
-<div class="text-center m-3 form-group">
-    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-deny-edit' object.pk %}"> 
+<div class="text-center m-3">
+    <a class=" d-inlinebtn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'receipt-deny-edit' object.pk %}"> 
         Deny 
+    </a>
+    <a class="d-inline btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'receipt-approve-edit' object.pk %}"> 
+        Approve 
     </a>
 </div>
 {% endblock %}
