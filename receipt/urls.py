@@ -8,7 +8,8 @@ urlpatterns = [
     path('edit_requests/', ReceiptEditListView.as_view(), name = 'receipt-edit-home'),
     path('<pk>/', RecieptDetailView.as_view(), name = 'receipt-detail'),
     path('<pk>/edit/', views.UpdateReceipt, name='receipt-edit'),
-    path('<pk>/requestDetail/',RecieptEditDetailView.as_view(), name='receipt-edit-detail'),
     path('<pk>/editRequest/', views.RequestReceiptEdit, name='receipt-edit-request'),
-    path('<pk>/approve', views.ApproveRequestEdit, name='receipt-approve-edit'),
+    path('<pk>/requestDetail/',RecieptEditDetailView.as_view(), name='receipt-edit-detail'),
+    path('<pk>/requestDetail/approve', views.ApproveReceiptRequestEdit, name='receipt-approve-edit'),
+    path('<pk>/requestDetail/deny', views.DenyReceiptRequestEdit, name='receipt-deny-edit'),
 ]

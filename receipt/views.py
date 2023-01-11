@@ -55,6 +55,7 @@ class ReceiptEditListView(ListView):
 
 class RecieptEditDetailView(DetailView):
     model = ReceiptEdit
+    template_name = 'receipt/receipt_edit_detail.html'
 
 def RequestReceiptEdit(request, pk):
     object = get_object_or_404(Receipt, pk=pk)
@@ -79,10 +80,16 @@ def RequestReceiptEdit(request, pk):
     }
     return render(request, 'receipt/receipt_edit_request_form.html', context)
 
-def ApproveRequestEdit(request, pk):
+def ApproveReceiptRequestEdit(request, pk):
     object = get_object_or_404(ReceiptEdit, pk=pk)
 
     object.editOriginalReceipt()
+    object.delete()
+
+    return redirect('receipt-edit-home')
+
+def DenyReceiptRequestEdit(request, pk):
+    object = get_object_or_404(ReceiptEdit, pk=pk)
     object.delete()
 
     return redirect('receipt-edit-home')
