@@ -3,13 +3,13 @@
 {% block content %}
 <div class="card mx-auto w-75 bg-light">
     <div class="card-body">
-        <legend class="d-inline">Invoice {{ object.invoice_id }}</legend> 
+        <legend class="d-inline">Invoice {{ object.original_invoice_id }}</legend> 
             <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
                 <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
             </a>
-        <p class= "text-muted">{{ object.department }} Department</p>
+        <p class= "text-muted">{{ object.get_department }} Department</p>
         <hr>
-        <p>Issued Date: {{ object.date }}</p>
+        <p>Issued Date: {{ object.get_date }}</p>
         <p>Due Date : {{ object.due_date }}</p>
         <p>Vendor : {{ object.get_vendor_name }}</p>
         <pre>         {{ object.get_vendor_address }}</pre>
@@ -56,29 +56,18 @@
                 </tr>
             </tbody>
         </table>
-        <small><i>Uploaded by {{ object.get_uploader_name }}</i></small><br>
+        <small><i>Edited by {{ object.get_editor_name }}</i></small><br>
 
-        {% if object.first_CFO_approved %}
-            <small>Approved by {{object.get_first_CFO_name }}</small><br>
-        {% endif %}
-        {% if object.second_CFO_approved %}
-            <small>Approved by {{object.get_second_CFO_name }}</small><br>
-        {% endif %}
     </div>
 </div>
 <div class="text-center m-3 form-group">
-    {% if object.first_CFO_approved == False and object.second_CFO_approved == False %}
-        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit' object.pk %}"> 
-            Edit 
-        </a>
-        <!-- <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit-request' object.pk %}"> 
-            Edit 
-        </a> -->
-    {% endif %}
-    {% if object.first_CFO_approved == False or object.second_CFO_approved == False %}
-        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2"> 
-            Approve Payment 
-        </a>
-    {% endif %}
+    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-approve-edit' object.pk %}"> 
+        Approve 
+    </a>
+</div>
+<div class="text-center m-3 form-group">
+    <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'receipt-approve-edit' object.pk %}"> 
+        Deny 
+    </a>
 </div>
 {% endblock %}

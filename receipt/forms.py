@@ -49,7 +49,7 @@ class RequestReceiptEditForm(forms.ModelForm):
         }
 
         widgets = { 
-            'original_receipt_id' : forms.Select(attrs={'class' : 'form-control'}),
+            'original_receipt_id' : forms.HiddenInput,
             'date' : forms.NumberInput(attrs={'type': 'date'}),
             'invoice' : forms.Select(attrs={'class' : 'form-control'}),
             'vendor' : forms.Select(attrs={'class' : 'form-control'}),

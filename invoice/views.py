@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Invoice, Item
-from .forms import UploadInvoiceForm, AddItemForm, UpdateInvoiceForm
+from .models import Invoice, Item, InvoiceEdit
+from .forms import UploadInvoiceForm, AddItemForm, UpdateInvoiceForm, RequestInvoiceEditForm, RequestItemEditForm
 
 class InvoiceListView(ListView):
     model = Invoice
@@ -57,7 +57,7 @@ x = 0
 def getCount(object):
     global x
     x = (object.get_item_list()).count()
-
+ 
 
 def UpdateInvoice(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
@@ -81,36 +81,125 @@ def UpdateItem(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
     global x
 
+    i = x - 1
+    item = Item.objects.filter(invoice=object)[i]
+    original_item_invoice = object
+    original_item_name = item.name
+    original_item_unit_price = item.unit_price
+    original_item__quantity = item.quantity
+    original_item_total_price = item.total_price
+    initial_data = {'invoice': original_item_invoice, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
+    
     if request.method == "POST":
-        item_object = Item.objects.get(pk = x)
-        item_object.name = ""
-        item_object.unit_price = ""
-        item_object.quantity = ""
-        item_object.total_price = ""
-        
-        form = AddItemForm(request.POST, instance=item_object)
-        x -= 1
+        form = AddItemForm(request.POST, instance=item)
         if form.is_valid():
             form.save()
-            form = AddItemForm()
-        context = {
-            "form": form,
-            "object": object,
-        }
-        if x <= 0:
-            return redirect ('invoice-detail', pk=pk)
-        return render(request, 'invoice/item_update_form.html', context)
+            x -= 1
+            if x == 0:
+                return redirect ('invoice-detail', pk=pk)
 
+            i = x - 1
+            item = Item.objects.filter(invoice=object)[i]
+            original_item = get_object_or_404(Item, pk=item.pk)
+            original_item_invoice = object
+            original_item_name = item.name
+            original_item_unit_price = item.unit_price
+            original_item__quantity = item.quantity
+            original_item_total_price = item.total_price
+            initial_data = {'invoice': original_item_invoice, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
+            
+            form = AddItemForm(instance=item)
+            context = {
+                "form": form,
+                "object": object,
+            }
+            return render(request, 'invoice/item_update_form.html', context)
     else:
-        item_object = Item.objects.get(pk = x)
-        item_object.name = ""
-        item_object.unit_price = ""
-        item_object.quantity = ""
-        item_object.total_price = ""
-
-        form = AddItemForm(instance=item_object)
+        form = AddItemForm(instance=item)
         context = {
             "form": form,
             "object": object,
         }
         return render(request, 'invoice/item_update_form.html', context)
+
+class InvoiceEditListView(ListView):
+    model = InvoiceEdit
+    template_name = 'invoice/invoice_edit_home.html'
+    context_object_name = 'invoice_edits'
+    ordering = ['-original_invoice_id'] 
+
+class InvoiceEditDetailView(DetailView):
+    model = InvoiceEdit
+
+def InvoiceEditRequest(request, pk):
+    object = get_object_or_404(Invoice, pk=pk)
+    original_due_date = object.due_date
+    original_vendor = object.vendor
+    original_amount_charged = object.amount_charged
+    original_tax = object.tax
+    original_amount_owed = object.amount_owed
+    intial_data = {'original_invoice_id': object, 'due_date': original_due_date, 'vendor': original_vendor, 'amount_charged': original_amount_charged, 'tax': original_tax, 'amount_owed': original_amount_owed} # 'editor': request.user
+    form = RequestInvoiceEditForm(initial=intial_data)
+    getCount(object)
+
+    if request.method == "POST":
+        form = RequestInvoiceEditForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect ('item-edit-request', pk=pk)
+
+    context = {
+        "form": form,
+        "object": object,
+    }
+    return render(request, 'invoice/invoice_edit_request_form.html', context)
+
+
+def ItemEditRequest(request, pk):
+    object = get_object_or_404(Invoice, pk=pk)
+    global x
+
+    i = x - 1
+    item = Item.objects.filter(invoice=object)[i]
+    original_item = get_object_or_404(Item, pk=item.pk)
+    original_item_invoice = object
+    item_invoice_edit = InvoiceEdit.objects.all().last()
+    original_item_name = item.name
+    original_item_unit_price = item.unit_price
+    original_item__quantity = item.quantity
+    original_item_total_price = item.total_price
+    initial_data = {'original_item_id': original_item, 'invoice': original_item_invoice, 'invoice_edit': item_invoice_edit, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
+    
+    if request.method == "POST":
+        form = RequestItemEditForm(request.POST)
+        if form.is_valid():
+            form.save()
+            x -= 1
+            if x == 0:
+                return redirect ('invoice-detail', pk=pk)
+
+            i = x - 1
+            item = Item.objects.filter(invoice=object)[i]
+            original_item = get_object_or_404(Item, pk=item.pk)
+            original_item_invoice = object
+            item_invoice_edit = InvoiceEdit.objects.all().last()
+            original_item_name = item.name
+            original_item_unit_price = item.unit_price
+            original_item__quantity = item.quantity
+            original_item_total_price = item.total_price
+            initial_data = {'original_item_id': original_item, 'invoice': original_item_invoice, 'invoice_edit': item_invoice_edit, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
+            
+            form = RequestItemEditForm(initial=initial_data)
+            context = {
+                "form": form,
+                "object": object,
+            }
+            return render(request, 'invoice/item_edit_request_form.html', context)
+    else:
+        form = RequestItemEditForm(initial=initial_data)
+        context = {
+            "form": form,
+            "object": object,
+        }
+        return render(request, 'invoice/item_edit_request_form.html', context)
+    

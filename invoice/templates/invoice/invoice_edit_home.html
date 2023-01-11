@@ -1,0 +1,40 @@
+{% extends 'invoice/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Unapproved Invoice Table -->
+<div class="m-5">
+  <h5 class="m-3 font-weight-bold">Invoices to be Approved</h5>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm" cellspacing="0">
+        <thead class="bg-table-gray">
+            <tr>
+              <th class="text-center">Invoice ID</th>
+              <th class="text-center">Vendor Name</th>
+              <th class="text-center">Department</th>
+              <th class="text-center">Amount Owed</th>
+              <th class="text-center">Due date</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for edit in invoice_edits %}
+            <tr>
+              <!-- Goes to invoice's details page when it is clicked -->
+              <td class="text-center"><a href="{% url 'invoice-edit-detail' edit.pk %}" class="text-dark"> {{edit.original_invoice_id}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-edit-detail' edit.pk %}" class="text-dark">{{edit.get_vendor_name}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-edit-detail' edit.pk %}" class="text-dark">{{edit.original_invoice_id.department}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-edit-detail' edit.pk %}" class="text-dark">{{edit.amount_owed}}</a></td>
+              <td class="text-center"><a href="{% url 'invoice-edit-detail' edit.pk %}" class="text-dark">{{edit.due_date}}</a></td>
+            </tr>            
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+
+<div class="fixed-bottom mx-3 my-3">
+  <a class="btn button-yellow font-weight-bold border-0 float-right text-center button py-2 px-3" href="{% url 'invoice-create' %}">
+    New Invoice
+  </a>
+</div>
+{% endblock %}

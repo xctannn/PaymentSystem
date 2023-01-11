@@ -16,7 +16,7 @@
               </tr>
           </thead>
           <tbody>
-            {% for edit in receipt-edits %}
+            {% for edit in receipt_edits %}
               <tr>
                 <td class="text-center"><a href="{% url 'receipt-edit-detail' edit.pk %}" class="text-dark">{{edit.original_receipt_id}}</a></td>
                 <td class="text-center"><a href="{% url 'receipt-edit-detail' edit.pk %}" class="text-dark">{{edit.get_invoice_id}}</a></td>
