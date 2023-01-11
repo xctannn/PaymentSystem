@@ -102,7 +102,7 @@ class InvoiceEdit(models.Model):
         self.original_invoice_id.amount_charged = self.amount_charged
         self.original_invoice_id.tax = self.tax
         self.original_invoice_id.amount_owed = self.amount_owed
-        self.original_invoice_id.update_fields=["due_date", "vendor", "amount_charged", "tax", "amount_owed"]
+        self.original_invoice_id.save(update_fields=["due_date", "vendor", "amount_charged", "tax", "amount_owed"])
 
     def __str__(self):
         return str(self.pk)
@@ -116,14 +116,12 @@ class ItemEdit(models.Model):
     quantity = models.IntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     
-    def editOriginalInvoice(self):
+    def editOriginalItem(self):
         self.original_item_id.name = self.name
         self.original_item_id.unit_price = self.unit_price
         self.original_item_id.quantity = self.quantity
         self.original_item_id.total_price = self.total_price
-        self.original_item_id.update_fields=["name", "unit_price", "quantity", "total_price"]
-
-    
+        self.original_item_id.save(update_fields=["name", "unit_price", "quantity", "total_price"])
 
     def __str__(self):
         return self.name

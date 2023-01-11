@@ -162,7 +162,7 @@ class RequestItemEditForm(forms.ModelForm):
         widgets = { 
             'original_item_id' : forms.HiddenInput,
             'invoice' : forms.HiddenInput,
-            'invoice_edit': forms.Select(attrs={'class' : 'form-control'}),
+            'invoice_edit': forms.HiddenInput,
             'name' : forms.TextInput(attrs={'class' : 'form-control'}),
             'unit_price' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'quantity' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),

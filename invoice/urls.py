@@ -12,4 +12,6 @@ urlpatterns = [
     path('<pk>/requestDetail/',InvoiceEditDetailView.as_view(), name='invoice-edit-detail'),
     path('<pk>/requestEdit/', views.InvoiceEditRequest, name='invoice-edit-request'),
     path('<pk>/requestEdit/item/', views.ItemEditRequest, name='item-edit-request'),
+    path('<pk>/approve', views.ApproveInvoiceRequestEdit, name='invoice-approve-edit'),
+
 ]

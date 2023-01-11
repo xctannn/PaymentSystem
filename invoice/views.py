@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
-from .models import Invoice, Item, InvoiceEdit
+from .models import Invoice, Item, InvoiceEdit, ItemEdit
 from .forms import UploadInvoiceForm, AddItemForm, UpdateInvoiceForm, RequestInvoiceEditForm, RequestItemEditForm
 
 class InvoiceListView(ListView):
@@ -203,3 +203,14 @@ def ItemEditRequest(request, pk):
         }
         return render(request, 'invoice/item_edit_request_form.html', context)
     
+def ApproveInvoiceRequestEdit(request, pk):
+    object = get_object_or_404(InvoiceEdit, pk=pk)
+
+    object.editOriginalInvoice()
+    item_edit_requests = ItemEdit.objects.filter(invoice_edit = object.pk)
+
+    for item in item_edit_requests:
+        item.editOriginalItem()
+    object.delete()
+
+    return redirect('invoice-edit-home')
