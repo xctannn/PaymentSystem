@@ -21,4 +21,5 @@ urlpatterns = [
     # path('', include('account.urls')),
     path('invoice/', include('invoice.urls')),
     path('receipt/', include('receipt.urls')),
+    path('notifications/', include('notification.urls')),
 ]
