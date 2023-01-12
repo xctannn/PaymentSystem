@@ -26,20 +26,3 @@ body {
 .button {
 	border-radius: 50px;
 }
-
-a:active{
-	color: #f7ce3e;
-}
-
-.nav-link:focus{
-	color: #f7ce3e;
-}
-
-.navbar-nav > .active > a{
-	color: #f7ce3e;
-}
-
-.nav-link.active {
-	font-weight: 500;
-	color: #f7ce3e;
-}
