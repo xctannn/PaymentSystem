@@ -32,6 +32,7 @@ class InvoiceCreateView(TemplateView):
             upload_invoice_form.save()
             added_invoice = Invoice.objects.last()
             added_invoice.set_department()
+            added_invoice.send_invoice_payment_request_notification_to_all_CFO()
             context = {
                 'AddItemForm': AddItemForm(),
                 'added_invoice': added_invoice,
@@ -177,6 +178,8 @@ def ItemEditRequest(request, pk):
             form.save()
             x -= 1
             if x == 0:
+                new_invoice_edit_request = InvoiceEdit.objects.all().last() # send notification to CFOs for edit request approval
+                new_invoice_edit_request.send_request_notification()
                 return redirect ('invoice-detail', pk=pk)
 
             i = x - 1
@@ -207,12 +210,14 @@ def ItemEditRequest(request, pk):
 def ApproveInvoiceRequestEdit(request, pk):
     object = get_object_or_404(InvoiceEdit, pk=pk)
 
-    object.editOriginalInvoice()
+    object.edit_original_invoice()
     item_edit_requests = ItemEdit.objects.filter(invoice_edit = object.pk)
 
     for item in item_edit_requests:
-        item.editOriginalItem()
+        item.edit_original_item()
         item.delete()
+
+    object.send_request_approval_notification()
     object.delete()
 
     return redirect('invoice-edit-home')
@@ -223,6 +228,8 @@ def DenyInvoiceRequestEdit(request, pk):
 
     for item in item_edit_requests:
         item.delete()  
+
+    object.send_request_deny_notification()
     object.delete()
 
     return redirect('invoice-edit-home')

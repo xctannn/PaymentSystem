@@ -72,6 +72,8 @@ def RequestReceiptEdit(request, pk):
         form = RequestReceiptEditForm(request.POST, initial=initial_data)
         if form.is_valid():
             form.save()
+            new_receipt_edit_request = ReceiptEdit.objects.all().last()
+            new_receipt_edit_request.send_request_notification()
             return redirect ('receipt-detail', pk=pk)
 
     context = {
@@ -83,13 +85,15 @@ def RequestReceiptEdit(request, pk):
 def ApproveReceiptRequestEdit(request, pk):
     object = get_object_or_404(ReceiptEdit, pk=pk)
 
-    object.editOriginalReceipt()
+    object.edit_original_receipt()
+    object.send_request_approval_notification()
     object.delete()
 
     return redirect('receipt-edit-home')
 
 def DenyReceiptRequestEdit(request, pk):
     object = get_object_or_404(ReceiptEdit, pk=pk)
+    object.send_request_deny_notification()
     object.delete()
 
     return redirect('receipt-edit-home')
