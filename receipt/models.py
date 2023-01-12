@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import EmployeeProfile, VendorProfile
 from invoice.models import Invoice
+from notification.models import Notification
 
 class Receipt(models.Model):
     receipt_id = models.CharField(max_length=20, primary_key=True)
@@ -65,7 +66,21 @@ class ReceiptEdit(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def editOriginalReceipt(self):
+    def edit_original_receipt(self):
         self.original_receipt_id.date = self.date
         self.original_receipt_id.vendor = self.vendor
         self.original_receipt_id.save(update_fields=['date', 'vendor'])
+
+    def send_request_notification(self):
+        # get two cfos by filtering their roles
+        # for CFO in CFOS:
+        notify  = Notification(receipt_edit=self, notification_type=2) # receiver = CFO
+        notify.save()
+
+    def send_request_approval_notification(self):
+        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = True) # receiver = self.editor
+        notify.save()
+    
+    def send_request_deny_notification(self):
+        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = False) # receiver = self.editor
+        notify.save()
