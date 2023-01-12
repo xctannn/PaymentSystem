@@ -69,11 +69,11 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
             added_invoice = Invoice.objects.last()
             employee = EmployeeProfile.objects.get(user = self.request.user)
             added_invoice.set_uploader(employee)
-            context['CFO'] = "CFO"
             context = {
                 'AddItemForm': AddItemForm(),
                 'added_invoice': added_invoice,
             }
+            context['CFO'] = "CFO"
             return render(request, self.template_name, context)
 
         if FO_upload_invoice_form.is_valid():
@@ -95,14 +95,14 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
             total_price = add_item_form.cleaned_data['total_price']
             added_invoice = Invoice.objects.last()
             item = Item.objects.create(invoice = added_invoice, name = name, unit_price = unit_price, quantity = quantity, total_price = total_price)
-            item.save()
-            if is_CFO(self.request.user):
-                context['CFO'] = "CFO"
+            item.save() 
             context = {
                 'AddItemForm': AddItemForm(),
                 'UploadButton': 'UploadButton',
                 'added_invoice': added_invoice,
             }
+            if is_CFO(self.request.user):
+                context['CFO'] = "CFO"
             return render(request, self.template_name, context)
 
         else:
