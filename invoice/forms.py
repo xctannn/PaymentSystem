@@ -14,7 +14,6 @@ class UploadInvoiceForm(forms.ModelForm):
             'amount_charged',
             'tax',
             'amount_owned',
-            'uploader',
         ]
 
         labels = {
@@ -35,7 +34,6 @@ class UploadInvoiceForm(forms.ModelForm):
             'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'amount_owned' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
-            'uploader' : forms.Select(attrs={'class' : 'form-control'}),
         }
 
 
