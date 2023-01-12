@@ -8,7 +8,7 @@
                 {% csrf_token %}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4 d-inline font-weight-bold">
-                        Edit Receipt {{ object.pk }}
+                        Edit Payment {{ object.pk }}
                         <a href="{% url 'payment-detail' object.pk %}" class="close float-right mr-3">
                         <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
                         </a>
