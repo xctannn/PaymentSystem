@@ -30,7 +30,7 @@
       </div>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="nav navbar-nav navbar-right">
-          <img class="nav-item nav-link bell" src="{% static 'bell.png' %}" href = "#">
+          <a href = "{% url 'notification-home' %}"><img class="nav-item nav-link bell" src="{% static 'bell.png' %}" ></a>
           <a class="nav-item nav-link {% if request.path == invoice %} active {% endif %}" href="{% url 'invoice-home' %}">Invoice</a>
           <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'receipt-home' %}">Receipt</a>
           <a class="nav-item nav-link" href = "#" >Payment</a>
