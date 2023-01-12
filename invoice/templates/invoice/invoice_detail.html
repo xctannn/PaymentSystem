@@ -72,9 +72,16 @@
             Edit 
         </a>
     {% endif %}
-    {% if CFO %}
-        {% if object.first_CFO_approved == False or object.second_CFO_approved == False %}
-            <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2"> 
+    {% if CFO1 %}
+        {% if object.first_CFO_approved == False %}
+            <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2" href="{% url 'invoice-approve-payment' object.pk %}"> 
+                Approve Payment 
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if CFO2 %}
+        {% if object.second_CFO_approved == False %}
+            <a class="btn button-yellow font-weight-bold border-0 button py-2 px-3 mx-2" href="{% url 'invoice-approve-payment' object.pk %}"> 
                 Approve Payment 
             </a>
         {% endif %}
