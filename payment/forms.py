@@ -15,9 +15,9 @@ class UploadPaymentForm(forms.ModelForm):
 
         labels = {
             'payment_id': 'Payment ID ',
-            'date': "Date ",
+            'date': "Payment Date",
             'invoice': 'Invoice ID ',
-            'vendor': 'Vendor ',
+            'vendor': 'Vendor',
         }
 
         widgets = { 

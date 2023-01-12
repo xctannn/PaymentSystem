@@ -14,7 +14,6 @@
                 <th class="text-center">Payment Date</th>
                 <th class="text-center">Amount Paid</th>
                 <th class="text-center">Vendor Name</th>
-                <th class="text-center">Verified</th>
             </tr>
         </thead>
         <tbody>
@@ -22,10 +21,9 @@
             <tr>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.payment_id}}</a></td>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_invoice_id}}</a></td>
-              <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_vendor_name}}</a></td>
-              <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_department}}</a></td>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.date}}</a></td>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_amount_paid}}</a></td>
+              <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.date}}</a></td>
             </tr>
           {% endfor %}
         </tbody>
