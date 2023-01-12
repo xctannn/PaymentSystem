@@ -10,7 +10,7 @@ class Invoice(models.Model):
     amount_charged = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.IntegerField(null=True)
     amount_owned = models.DecimalField(max_digits=10, decimal_places=2)
-    uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING)
+    uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
     department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
     first_CFO_approved = models.BooleanField(default=False)
     second_CFO_approved = models.BooleanField(default=False)
@@ -24,6 +24,10 @@ class Invoice(models.Model):
 
     def get_vendor_address(self):
         return self.vendor.address
+
+    def set_uploader(self, uploader):
+        self.uploader = uploader
+        self.save(update_fields=["uploader"])
 
     def set_department(self):
         self.department = self.uploader.department
