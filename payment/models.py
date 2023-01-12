@@ -9,8 +9,8 @@ class Payment(models.Model):
     date = models.DateField()
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
-    uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING)
-    
+    uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
+
     def get_vendor_name(self):
         return self.vendor.name
 
@@ -25,9 +25,10 @@ class Payment(models.Model):
 
     def get_uploader_name(self):
         return (self.uploader.first_name + " " + self.uploader.last_name)
-    
-    def get_department(self):
-        return self.invoice.department
+
+    def set_uploader(self, uploader):
+        self.uploader = uploader
+        self.save(update_fields=["uploader"])
 
     def __str__(self):
         return self.payment_id
