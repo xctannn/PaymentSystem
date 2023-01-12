@@ -21,7 +21,7 @@
                 <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.receipt_id}}</a></td>
                 <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_invoice_id}}</a></td>
                 <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_vendor_name}}</a></td>
-                <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_department}}</a></td>
+                <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.department}}</a></td>
                 <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.date}}</a></td>
                 <td class="text-center"><a href="{% url 'receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_amount_paid}}</a></td>
               </tr>

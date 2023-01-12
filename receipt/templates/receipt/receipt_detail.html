@@ -7,7 +7,7 @@
             <a href="{% url 'receipt-home' %}" class="close float-right mr-3">
                 <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
             </a>
-        <p class= "text-muted">{{ object.get_department }} Department</p>
+        <p class= "text-muted">{{ object.department }} Department</p>
         <hr>
         <p>Paid Date : {{ object.date }}</p>
         <p>Amount Paid : {{ object.get_amount_paid }}</p>
