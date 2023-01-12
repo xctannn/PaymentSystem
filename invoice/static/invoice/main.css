@@ -54,3 +54,8 @@ a:active{
 	font-weight: 500;
 	color: #f7ce3e;
 }
+
+.bell{
+    height: 2.5em;
+    width: 2.5em;
+}
