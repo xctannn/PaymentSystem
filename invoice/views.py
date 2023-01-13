@@ -84,13 +84,7 @@ def UpdateItem(request, pk):
 
     i = x - 1
     item = Item.objects.filter(invoice=object)[i]
-    original_item_invoice = object
-    original_item_name = item.name
-    original_item_unit_price = item.unit_price
-    original_item__quantity = item.quantity
-    original_item_total_price = item.total_price
-    initial_data = {'invoice': original_item_invoice, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
-    
+   
     if request.method == "POST":
         form = AddItemForm(request.POST, instance=item)
         if form.is_valid():
@@ -101,13 +95,6 @@ def UpdateItem(request, pk):
 
             i = x - 1
             item = Item.objects.filter(invoice=object)[i]
-            original_item = get_object_or_404(Item, pk=item.pk)
-            original_item_invoice = object
-            original_item_name = item.name
-            original_item_unit_price = item.unit_price
-            original_item__quantity = item.quantity
-            original_item_total_price = item.total_price
-            initial_data = {'invoice': original_item_invoice, 'name': original_item_name, 'unit_price': original_item_unit_price, 'quantity': original_item__quantity, 'total_price': original_item_total_price}
             
             form = AddItemForm(instance=item)
             context = {
