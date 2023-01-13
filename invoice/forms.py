@@ -145,7 +145,6 @@ class RequestInvoiceEditForm(forms.ModelForm):
             'amount_charged',
             'tax',
             'amount_owed',
-            'editor',
         ]
 
         labels = {
@@ -165,7 +164,6 @@ class RequestInvoiceEditForm(forms.ModelForm):
             'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'amount_owed' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
-            'uploader' : forms.Select(attrs={'class' : 'form-control'}),
         }
 
 class RequestItemEditForm(forms.ModelForm):
