@@ -1,25 +1,40 @@
 from django.shortcuts import render,redirect
-
-
+from account.models import EmployeeProfile, VendorProfile
 from .models import Notification
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+
+def is_CFO(User):
+    return User.groups.filter(name='CFO').exists()
+
+def is_FO(User):
+    return User.groups.filter(name='Finance Officer').exists()
+
+def is_vendor(User):
+    return User.groups.filter(name='Vendor').exists()
+
+@login_required
 def GetNotifications(request):
-    user = request.user
-    notifications = Notification.objects.order_by('-date') #filter(reciver=user)
-    
+    if is_CFO(request.user) or is_FO(request.user):
+        employee = EmployeeProfile.objects.get(user = request.user)
+        notifications = Notification.objects.filter(employee_receiver=employee).order_by('-date') 
+    if is_vendor(request.user):
+        vendor = VendorProfile.objects.get(user = request.user)
+        notifications = Notification.objects.filter(vendor_receiver=vendor).order_by('-date') 
+        
     context = {
         'notifications': notifications
     }
-
+    if is_CFO(request.user):
+        context['CFO'] = "CFO"
     return render(request, 'notification/home.html', context)
 
-def DeleteNotification(request, noti_id):
-    user = request.user
-    Notification.objects.filter(id=noti_id).delete() #filter(reciver=user)
-    return redirect('notification-home')
 
-def CountNotifications(request):
-    count_notifications = None
-    if request.user.is_authenticated:
-        count_notifications = Notification.objects.filter(user=request.user).count()
-    return {'count_notifications': count_notifications}
+@login_required
+def DeleteNotification(request, noti_id):
+    if is_CFO(request.user) or is_FO(request.user):
+        employee = EmployeeProfile.objects.get(user = request.user)
+        Notification.objects.filter(employee_receiver=employee, id=noti_id).delete() 
+    if is_vendor(request.user):
+        vendor = VendorProfile.objects.get(user = request.user)
+        Notification.objects.filter(vendor_receiver=vendor, id=noti_id).delete() 
+    return redirect('notification-home')
