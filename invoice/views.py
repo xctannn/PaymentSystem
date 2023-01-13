@@ -184,10 +184,15 @@ def UpdateItem(request, pk):
 @login_required
 def ApprovePayment(request, pk):
     invoice = Invoice.objects.get(pk=pk)
-    if invoice.first_CFO_approved == False:
-        invoice.set_first_CFO_approve()
-    else:
-        invoice.set_second_CFO_approve()
+    if is_CFO(request.user):
+        CFO = get_object_or_404(EmployeeProfile, user=request.user)
+        if CFO == EmployeeProfile.objects.filter(position='CFO').first():
+            invoice.set_first_CFO_approve()
+            invoice.send_invoice_payment_request_notification_to_other_CFO(CFO)
+        elif CFO == EmployeeProfile.objects.filter(position='CFO').last():
+            invoice.set_second_CFO_approve()
+            invoice.send_invoice_payment_request_notification_to_other_CFO(CFO)
+    if invoice.first_CFO_approved == True and invoice.second_CFO_approved == True:
         invoice.set_approved_date()
     return redirect('invoice-detail', pk=pk)
 
@@ -197,20 +202,12 @@ class InvoiceEditListView(LoginRequiredMixin, ListView):
     template_name = 'invoice/invoice_edit_home.html'
     context_object_name = 'invoice_edits'
     ordering = ['-original_invoice_id']
-    def get_context_data(self, **kwargs):
-        context = super(InvoiceEditListView, self).get_context_data(**kwargs)
-        if is_CFO(self.request.user):
-            context['CFO'] = "CFO"
-        return context 
+    extra_context={"CFO": "CFO"}
 
 class InvoiceEditDetailView(LoginRequiredMixin, DetailView):
     model = InvoiceEdit
     template_name = 'invoice/invoice_edit_detail.html'  
-    def get_context_data(self, **kwargs):
-        context = super(InvoiceEditDetailView, self).get_context_data(**kwargs)
-        if is_CFO(self.request.user):
-            context['CFO'] = "CFO"
-        return context  
+    extra_context={"CFO": "CFO"}
 
 @login_required
 def InvoiceEditRequest(request, pk):
@@ -220,7 +217,7 @@ def InvoiceEditRequest(request, pk):
     original_amount_charged = object.amount_charged
     original_tax = object.tax
     original_amount_owed = object.amount_owed
-    intial_data = {'original_invoice_id': object, 'due_date': original_due_date, 'vendor': original_vendor, 'amount_charged': original_amount_charged, 'tax': original_tax, 'amount_owed': original_amount_owed} # 'editor': request.user
+    intial_data = {'original_invoice_id': object, 'due_date': original_due_date, 'vendor': original_vendor, 'amount_charged': original_amount_charged, 'tax': original_tax, 'amount_owed': original_amount_owed}
     form = RequestInvoiceEditForm(initial=intial_data)
     getCount(object)
 
@@ -228,6 +225,9 @@ def InvoiceEditRequest(request, pk):
         form = RequestInvoiceEditForm(request.POST)
         if form.is_valid():
             form.save()
+            added_invoice_edit = InvoiceEdit.objects.all().last()
+            editor = EmployeeProfile.objects.get(user = request.user)
+            added_invoice_edit.set_editor(editor)
             return redirect ('item-edit-request', pk=pk)
 
     context = {

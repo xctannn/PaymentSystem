@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Receipt, ReceiptEdit
 from django.views.generic import ListView, DetailView, TemplateView
-from .forms import UploadReceiptForm, RequestReceiptEditForm
+from .forms import UploadReceiptForm, UpdateReceiptForm, RequestReceiptEditForm
 from account.models import EmployeeProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -68,10 +68,10 @@ class ReceiptCreateView(LoginRequiredMixin, TemplateView):
 @login_required
 def UpdateReceipt(request, pk):
     object = get_object_or_404(Receipt, pk=pk)
-    form = UploadReceiptForm(instance=object)
+    form = UpdateReceiptForm(instance=object)
 
     if request.method == "POST":
-        form = UploadReceiptForm(request.POST, instance=object)
+        form = UpdateReceiptForm(request.POST, instance=object)
         if form.is_valid():
             form.save()
             return redirect ('receipt-detail', pk=pk)
@@ -112,9 +112,7 @@ def RequestReceiptEdit(request, pk):
     original_date = object.date
     original_invoice = object.invoice
     original_vendor = object.vendor
-    # current_user = request.user
-
-    initial_data = {'date': original_date,'original_receipt_id': object, 'invoice': original_invoice, 'vendor': original_vendor} # 'editor': current_user
+    initial_data = {'date': original_date,'original_receipt_id': object, 'invoice': original_invoice, 'vendor': original_vendor}
     form = RequestReceiptEditForm(initial=initial_data)
 
     if request.method == "POST":
@@ -122,6 +120,8 @@ def RequestReceiptEdit(request, pk):
         if form.is_valid():
             form.save()
             new_receipt_edit_request = ReceiptEdit.objects.all().last()
+            editor = EmployeeProfile.objects.get(user = request.user)
+            new_receipt_edit_request.set_editor(editor)
             new_receipt_edit_request.send_request_notification()
             return redirect ('receipt-detail', pk=pk)
 
