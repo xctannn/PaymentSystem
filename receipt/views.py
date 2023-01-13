@@ -38,6 +38,8 @@ class RecieptDetailView(LoginRequiredMixin, DetailView):
         context = super(RecieptDetailView, self).get_context_data(**kwargs)
         if is_CFO(self.request.user):
             context['CFO'] = "CFO"
+        if is_FO(self.request.user):
+            context['FO'] = "FO"
         return context
 
 
@@ -83,16 +85,27 @@ def UpdateReceipt(request, pk):
     return render(request, 'receipt/receipt_update_form.html', context)
 
 
-class ReceiptEditListView(ListView):
+class ReceiptEditListView(LoginRequiredMixin, ListView):
     model = ReceiptEdit
     template_name = 'receipt/receipt_edit_home.html'
     context_object_name = 'receipt_edits'
     ordering = ['-original_receipt_id']  #order by original receipt id
+    def get_context_data(self, **kwargs):
+        context = super(ReceiptEditListView, self).get_context_data(**kwargs)
+        if is_CFO(self.request.user):
+            context['CFO'] = "CFO"
+        return context 
 
-class RecieptEditDetailView(DetailView):
+class RecieptEditDetailView(LoginRequiredMixin, DetailView):
     model = ReceiptEdit
     template_name = 'receipt/receipt_edit_detail.html'
+    def get_context_data(self, **kwargs):
+        context = super(RecieptEditDetailView, self).get_context_data(**kwargs)
+        if is_CFO(self.request.user):
+            context['CFO'] = "CFO"
+        return context  
 
+@login_required
 def RequestReceiptEdit(request, pk):
     object = get_object_or_404(Receipt, pk=pk)
 

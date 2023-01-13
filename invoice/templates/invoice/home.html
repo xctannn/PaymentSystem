@@ -6,11 +6,13 @@
 <div class="m-5">
   <div class="d-flex justify-content-between">
     <h5 class="m-3 font-weight-bold">Invoices to be Approved</h5>
+    {% if CFO %}
     <div class="ms-auto text-center m-3 form-group">
         <a class="btn button-light font-weight-bold border-0 button py-2 px-4 mx-2" href="{% url 'invoice-edit-home' %}"> 
             Invoice Edit Requests 
         </a>
     </div>
+    {% endif %}
 </div>  
     <div class="table-responsive">
       <table class="table table-striped table-hover table-sm" cellspacing="0">
@@ -19,7 +21,7 @@
               <th class="text-center">Invoice ID</th>
               <th class="text-center">Vendor Name</th>
               <th class="text-center">Department</th>
-              <th class="text-center">Amount Owed</th>
+              <th class="text-center">Amount Owed (RM)</th>
               <th class="text-center">Issued date</th>
             </tr>
         </thead>

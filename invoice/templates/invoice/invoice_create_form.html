@@ -26,7 +26,7 @@
       {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4 d-inline">
-                Add Item of the Invoice
+                Add Item of the Invoice {{ added_invoice.invoice_id }}
                 <a href="{% url 'invoice-home' %}" class="close float-right mr-3">
                     <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
                 </a>
@@ -67,7 +67,7 @@
             <th scope="col">Item</th>
             <th scope="col">Unit Price</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Total Price</th>
+            <th scope="col">Total Price (RM)</th>
             </tr>
         </thead>
         <tbody>
@@ -83,7 +83,7 @@
             <tr>
                 <td></td>
                 <td></td>
-                <th>Subtotal</th>
+                <th>Subtotal (RM)</th>
                 <td>{{ added_invoice.amount_charged }}</td>
                 </tr>
             </tr>
@@ -97,7 +97,7 @@
             <tr>
                 <td></td>
                 <td></td>
-                <th>Amount Owed</th>
+                <th>Amount Owed (RM)</th>
                 <td>{{ added_invoice.amount_owed }}</td>
                 </tr>
             </tr>
@@ -115,5 +115,5 @@
     </div>
   </div>
 {% endif %}
-  <p>{{ msg }}</p>
+  <p class="text-center ml-4">{{ msg }}</p>
 {% endblock %}

@@ -4,11 +4,13 @@
 <div class="m-5">
     <div class="d-flex justify-content-between">
         <h5 class="m-3 font-weight-bold">Receipts</h5>
-        <div class="ms-auto text-center m-3 form-group">
-            <a class="btn button-light font-weight-bold border-0 button py-2 px-4 mx-2" href="{% url 'receipt-edit-home' %}"> 
+        {% if CFO %}
+          <div class="ms-auto text-center m-3 form-group">
+              <a class="btn button-light font-weight-bold border-0 button py-2 px-4 mx-2" href="{% url 'receipt-edit-home' %}"> 
                 Receipt Edit Requests 
-            </a>
-        </div>
+              </a>
+          </div>
+        {% endif %}
     </div>  
     
       <div class="table-responsive">
@@ -20,7 +22,7 @@
                 <th class="text-center">Vendor Name</th>
                 <th class="text-center">Department</th>
                 <th class="text-center">Date</th>
-                <th class="text-center">Amount Paid</th>
+                <th class="text-center">Amount Paid (RM)</th>
               </tr>
           </thead>
           <tbody>

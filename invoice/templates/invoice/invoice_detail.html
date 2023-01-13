@@ -20,7 +20,7 @@
                 <th scope="col">Item</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Total Price</th>
+                <th scope="col">Total Price (RM)</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +50,7 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <th>Amount Owed</th>
+                    <th>Amount Owed (RM)</th>
                     <td>{{ object.amount_owed }}</td>
                     </tr>
                 </tr>
@@ -67,10 +67,14 @@
     </div>
 </div>
 <div class="text-center m-3 form-group">
-    {% if object.first_CFO_approved == False and object.second_CFO_approved == False %}
-        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit' object.pk %}"> 
-            Edit 
-        </a>
+    {% if CFO1 or CFO2 %}
+        {% if object.first_CFO_approved == False and object.second_CFO_approved == False %}
+            <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit' object.pk %}"> 
+                Edit 
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if object.first_CFO_approved == False and object.second_CFO_approved == False and FO %}
         <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'invoice-edit-request' object.pk %}"> 
             Make Edit Request
         </a>
