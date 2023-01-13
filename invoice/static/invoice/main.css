@@ -37,3 +37,8 @@ body {
 .button {
 	border-radius: 50px;
 }
+
+.bell{
+	height: 2.5em;
+	width: 2.5em;
+}
