@@ -27,6 +27,30 @@ class UploadReceiptForm(forms.ModelForm):
             'vendor' : forms.Select(attrs={'class' : 'form-control'}),
         }
 
+
+class UpdateReceiptForm(forms.ModelForm):
+    
+    class Meta:
+        model = Receipt
+        
+        fields = [
+            'date',
+            'invoice',
+            'vendor',
+        ]
+
+        labels = {
+            'date': "Date ",
+            'invoice': 'Invoice ID ',
+            'vendor': 'Vendor ',
+        }
+
+        widgets = { 
+            'date' : forms.NumberInput(attrs={'type': 'date'}),
+            'invoice' : forms.Select(attrs={'class' : 'form-control'}),
+            'vendor' : forms.Select(attrs={'class' : 'form-control'}),
+        }
+
 class RequestReceiptEditForm(forms.ModelForm):
     
     class Meta:
@@ -37,7 +61,6 @@ class RequestReceiptEditForm(forms.ModelForm):
             'date',
             'invoice',
             'vendor',
-            'editor'
         ]
 
         labels = {
