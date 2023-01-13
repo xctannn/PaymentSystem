@@ -1,0 +1,30 @@
+{% extends 'invoice/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mx-auto w-75 bg-light">
+    <div class="card-body">
+        <legend class="d-inline">Edit Request: Receipt {{ object.original_receipt_id }}</legend> 
+            <a href="{% url 'receipt-edit-home' %}" class="close float-right mr-3">
+                <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+            </a>
+        <p class= "text-muted">{{ object.get_department }} Department</p>
+        <hr>
+        <p>Paid Date : {{ object.date }}</p>
+        <p>Amount Paid : {{ object.get_amount_paid }}</p>
+        <p>Invoice ID: {{ object.get_invoice_id }}</p>
+        <p>Vendor : {{ object.get_vendor_name }}</p>
+        <pre>         {{ object.get_vendor_address }}</pre>
+
+        <small><i>Edited by {{ object.get_editor_name }}</i></small><br>
+
+    </div>
+</div>
+<div class="text-center m-3">
+    <a class=" d-inlinebtn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'receipt-deny-edit' object.pk %}"> 
+        Deny 
+    </a>
+    <a class="d-inline btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-3" href="{% url 'receipt-approve-edit' object.pk %}"> 
+        Approve 
+    </a>
+</div>
+{% endblock %}

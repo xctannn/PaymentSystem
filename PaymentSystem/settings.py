@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'receipt.apps.ReceiptConfig',
     'account.apps.AccountConfig',
     'payment.apps.PaymentConfig',
+    'notification.apps.NotificationConfig',
     'crispy_forms',
     "bootstrap5",
     'django.contrib.admin',

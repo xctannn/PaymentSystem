@@ -23,6 +23,17 @@ body {
 	background-color: #c3beb6;
 }
 
+
+.button-light{
+	background-color: #1a2930;
+    color: #dddad5;
+}
+
+.button-light:hover{
+	background-color: #1a2930;
+    color: #ffffff;
+}
+
 .button {
 	border-radius: 50px;
 }

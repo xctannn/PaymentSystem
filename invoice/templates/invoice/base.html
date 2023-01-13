@@ -27,12 +27,13 @@
       </div>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="nav navbar-nav navbar-right">
-            <a class="nav-item nav-link {% if request.path == invoice %} active {% endif %}" href="{% url 'invoice-home' %}">Invoice</a>
-            <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'receipt-home' %}">Receipt</a>
-            {% if CFO or CFO1 or CFO2 %}
-              <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href ="{% url 'payment-home'%}">Payment</a>
-            {% endif %}
-            <a class="nav-item nav-link" href = "{% url 'logout' %}" >Log Out</a>
+          <a href = "{% url 'notification-home' %}"><img class="nav-item nav-link bell" src="{% static 'bell.png' %}" ></a>
+          <a class="nav-item nav-link {% if request.path == invoice %} active {% endif %}" href="{% url 'invoice-home' %}">Invoice</a>
+          <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'receipt-home' %}">Receipt</a>
+          {% if CFO or CFO1 or CFO2 %}
+            <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href ="{% url 'payment-home'%}">Payment</a>
+          {% endif %}
+          <a class="nav-item nav-link" href = "{% url 'logout' %}" >Log Out</a>
         </div> 
       </div>
     </nav>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Receipt
+from .models import Receipt, ReceiptEdit
 from django.views.generic import ListView, DetailView, TemplateView
-from .forms import UploadReceiptForm
+from .forms import UploadReceiptForm, RequestReceiptEditForm
 from account.models import EmployeeProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -63,6 +63,7 @@ class ReceiptCreateView(LoginRequiredMixin, TemplateView):
             return redirect('receipt-home')
 
 
+@login_required
 def UpdateReceipt(request, pk):
     object = get_object_or_404(Receipt, pk=pk)
     form = UploadReceiptForm(instance=object)
@@ -80,3 +81,55 @@ def UpdateReceipt(request, pk):
     if is_CFO(request.user):
         context['CFO'] = "CFO"
     return render(request, 'receipt/receipt_update_form.html', context)
+
+
+class ReceiptEditListView(ListView):
+    model = ReceiptEdit
+    template_name = 'receipt/receipt_edit_home.html'
+    context_object_name = 'receipt_edits'
+    ordering = ['-original_receipt_id']  #order by original receipt id
+
+class RecieptEditDetailView(DetailView):
+    model = ReceiptEdit
+    template_name = 'receipt/receipt_edit_detail.html'
+
+def RequestReceiptEdit(request, pk):
+    object = get_object_or_404(Receipt, pk=pk)
+
+    original_date = object.date
+    original_invoice = object.invoice
+    original_vendor = object.vendor
+    # current_user = request.user
+
+    initial_data = {'date': original_date,'original_receipt_id': object, 'invoice': original_invoice, 'vendor': original_vendor} # 'editor': current_user
+    form = RequestReceiptEditForm(initial=initial_data)
+
+    if request.method == "POST":
+        form = RequestReceiptEditForm(request.POST, initial=initial_data)
+        if form.is_valid():
+            form.save()
+            new_receipt_edit_request = ReceiptEdit.objects.all().last()
+            new_receipt_edit_request.send_request_notification()
+            return redirect ('receipt-detail', pk=pk)
+
+    context = {
+        "form": form,
+        "object": object,
+    }
+    return render(request, 'receipt/receipt_edit_request_form.html', context)
+
+def ApproveReceiptRequestEdit(request, pk):
+    object = get_object_or_404(ReceiptEdit, pk=pk)
+
+    object.edit_original_receipt()
+    object.send_request_approval_notification()
+    object.delete()
+
+    return redirect('receipt-edit-home')
+
+def DenyReceiptRequestEdit(request, pk):
+    object = get_object_or_404(ReceiptEdit, pk=pk)
+    object.send_request_deny_notification()
+    object.delete()
+
+    return redirect('receipt-edit-home')
