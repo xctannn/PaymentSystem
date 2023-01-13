@@ -42,7 +42,7 @@ class ReceiptEdit(models.Model):
     date = models.DateField()
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
-    editor = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING)
+    editor = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, null=True, blank=True)
     
     def get_vendor_name(self):
         return self.vendor.name
@@ -66,8 +66,9 @@ class ReceiptEdit(models.Model):
         self.invoice = invoice
         self.save(update_fields=["invoice"])
 
-    def set_editor(self, user):
-        self.editor = user
+    def set_editor(self, editor):
+        self.editor = editor
+        self.save(update_fields=["editor"])
 
     def __str__(self):
         return str(self.pk)
@@ -78,15 +79,15 @@ class ReceiptEdit(models.Model):
         self.original_receipt_id.save(update_fields=['date', 'vendor'])
 
     def send_request_notification(self):
-        # get two cfos by filtering their roles
-        # for CFO in CFOS:
-        notify  = Notification(receipt_edit=self, notification_type=2) # receiver = CFO
-        notify.save()
+        CFOs = EmployeeProfile.objects.filter(position='CFO')
+        for CFO in CFOs:
+            notify = Notification(receipt_edit=self, notification_type=2, employee_receiver = CFO)
+            notify.save()
 
     def send_request_approval_notification(self):
-        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = True) # receiver = self.editor
+        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = True, employee_receiver=self.editor)
         notify.save()
     
     def send_request_deny_notification(self):
-        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = False) # receiver = self.editor
+        notify = Notification(receipt=self.original_receipt_id, notification_type=3, success = False, employee_receiver=self.editor)
         notify.save()
