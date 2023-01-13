@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import EmployeeProfile, VendorProfile
+from account.models import EmployeeProfile, VendorProfile, User
 from notification.models import Notification
 import datetime
 
@@ -61,18 +61,19 @@ class Invoice(models.Model):
         return self.invoice_id
 
     def send_invoice_payment_request_notification_to_other_CFO(self, CFO):
-        # otherCFO = user.objects.filter(role='CFO').exclude(CFO)
-        notify  = Notification(invoice=self, notification_type=1) # receiver = otherCFO
+        user = User.objects.get(username=CFO.user)
+        otherCFO = EmployeeProfile.objects.filter(position='CFO').exclude(user=user).first()
+        notify  = Notification(invoice=self, notification_type=1, employee_receiver=otherCFO)
         notify.save()
     
     def send_invoice_payment_request_notification_to_all_CFO(self):
-        # get two cfos by filtering their roles
-        # for CFO in CFOS:
-        notify  = Notification(invoice=self, notification_type=1) # receiver = CFO
-        notify.save()
+        CFOs = EmployeeProfile.objects.filter(position='CFO')
+        for CFO in CFOs:
+            notify  = Notification(invoice=self, notification_type=1, employee_receiver=CFO)
+            notify.save()
 
     def send_invoice_payment_approval_notification(self):
-        notify = Notification(invoice=self, notification_type=1, success = True) # receiver = self.uploader
+        notify = Notification(invoice=self, notification_type=1, success = True, employee_receiver=self.uploader) 
         notify.save()
     
 class Item(models.Model):
@@ -95,7 +96,7 @@ class InvoiceEdit(models.Model):
     amount_charged = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.IntegerField(null=True)
     amount_owed = models.DecimalField(max_digits=10, decimal_places=2)
-    editor = models.ForeignKey(EmployeeProfile, on_delete=models.CASCADE)
+    editor = models.ForeignKey(EmployeeProfile, on_delete=models.CASCADE, blank=True, null=True)
 
     def get_department(self):
         return self.original_invoice_id.department
@@ -115,6 +116,10 @@ class InvoiceEdit(models.Model):
     def get_item_list(self):
         return ItemEdit.objects.filter(invoice_edit = self.pk).order_by('-pk')
 
+    def set_editor(self, editor):
+        self.editor = editor
+        self.save(update_fields=["editor"])
+
     def edit_original_invoice(self):
         self.original_invoice_id.due_date = self.due_date
         self.original_invoice_id.vendor = self.vendor
@@ -127,17 +132,17 @@ class InvoiceEdit(models.Model):
         return str(self.pk)
 
     def send_request_notification(self):
-        # get two cfos by filtering their roles
-        # for CFO in CFOS:
-        notify  = Notification(invoice_edit=self, notification_type=2) # receiver = CFO
-        notify.save()
+        CFOs = EmployeeProfile.objects.filter(position='CFO')
+        for CFO in CFOs:
+            notify  = Notification(invoice_edit=self, notification_type=2, employee_receiver = CFO)  
+            notify.save()
 
     def send_request_approval_notification(self):
-        notify = Notification(invoice=self.original_invoice_id, notification_type=3, success = True) # receiver = self.editor
+        notify = Notification(invoice=self.original_invoice_id, notification_type=3, success = True, employee_receiver=self.editor)
         notify.save()
     
     def send_request_deny_notification(self):
-        notify = Notification(invoice=self.original_invoice_id, notification_type=3, success = False) # receiver = self.editor
+        notify = Notification(invoice=self.original_invoice_id, notification_type=3, success = False, employee_receiver=self.editor)
         notify.save()
         
 class ItemEdit(models.Model):
