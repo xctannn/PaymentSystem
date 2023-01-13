@@ -43,6 +43,8 @@ class InvoiceDetailView(LoginRequiredMixin, DetailView):
                 context['CFO1'] = "CFO1"
             else:
                 context['CFO2'] = "CFO2"
+        if is_FO(self.request.user):
+            context['FO'] = "FO"
         return context
 
 
@@ -58,43 +60,44 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
             context['UploadInvoiceForm'] = FOUploadInvoiceForm()
         return render(request, self.template_name, context)
     
-
     def post(self, request):
         CFO_upload_invoice_form = CFOUploadInvoiceForm(request.POST)
         FO_upload_invoice_form = FOUploadInvoiceForm(request.POST)
         add_item_form = AddItemForm(request.POST)
-        
-        if CFO_upload_invoice_form.is_valid():
-            CFO_upload_invoice_form.save()
-            added_invoice = Invoice.objects.last()
-            employee = EmployeeProfile.objects.get(user = self.request.user)
-            added_invoice.set_uploader(employee)
-            context = {
-                'AddItemForm': AddItemForm(),
-                'added_invoice': added_invoice,
-            }
-            context['CFO'] = "CFO"
-            return render(request, self.template_name, context)
 
-        if FO_upload_invoice_form.is_valid():
-            FO_upload_invoice_form.save()
-            added_invoice = Invoice.objects.last()
-            employee = EmployeeProfile.objects.get(user = self.request.user)
-            added_invoice.set_uploader(employee)
-            added_invoice.set_department()
-            added_invoice.send_invoice_payment_request_notification_to_all_CFO()
-            context = {
-                'AddItemForm': AddItemForm(),
-                'added_invoice': added_invoice,
-            }
-            return render(request, self.template_name, context)
+        if is_CFO(self.request.user):
+            if CFO_upload_invoice_form.is_valid():
+                CFO_upload_invoice_form.save()
+                added_invoice = Invoice.objects.all().last()
+                employee = EmployeeProfile.objects.get(user = self.request.user)
+                added_invoice.set_uploader(employee)
+                context = {
+                    'AddItemForm': AddItemForm(),
+                    'added_invoice': added_invoice,
+                }
+                context['CFO'] = "CFO"
+                return render(request, self.template_name, context)
 
-        if request.method =='POST' and 'additem' in request.POST and add_item_form.is_valid():
+        if is_FO(self.request.user):
+            if FO_upload_invoice_form.is_valid():
+                FO_upload_invoice_form.save()
+                added_invoice = Invoice.objects.all().last()
+                employee = EmployeeProfile.objects.get(user = self.request.user)
+                added_invoice.set_uploader(employee)
+                added_invoice.set_department()
+                added_invoice.send_invoice_payment_request_notification_to_all_CFO()
+                context = {
+                    'AddItemForm': AddItemForm(),
+                    'added_invoice': added_invoice,
+                }
+                return render(request, self.template_name, context)
+
+        if add_item_form.is_valid():
             name = add_item_form.cleaned_data['name']
             unit_price = add_item_form.cleaned_data['unit_price']
             quantity = add_item_form.cleaned_data['quantity']
             total_price = add_item_form.cleaned_data['total_price']
-            added_invoice = Invoice.objects.last()
+            added_invoice = Invoice.objects.all().last()
             item = Item.objects.create(invoice = added_invoice, name = name, unit_price = unit_price, quantity = quantity, total_price = total_price)
             item.save() 
             context = {
@@ -108,14 +111,15 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
 
         else:
             context = {
-                'msg': "Invoice ID duplicate.",
+                'msg': "Invalid detail keyed in.",
+                'UploadInvoiceForm': FOUploadInvoiceForm(),
             }
             return render(request, self.template_name, context)
 
-x = 0
+item_count = 0
 def getCount(object):
-    global x
-    x = (object.get_item_list()).count()
+    global item_count
+    item_count = (object.get_item_list()).count()
 
 @login_required
 def UpdateInvoice(request, pk):
@@ -141,20 +145,20 @@ def UpdateInvoice(request, pk):
 @login_required
 def UpdateItem(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
-    global x
+    global item_count
 
-    i = x - 1
+    i = item_count - 1
     item = Item.objects.filter(invoice=object)[i]
    
     if request.method == "POST":
         form = AddItemForm(request.POST, instance=item)
         if form.is_valid():
             form.save()
-            x -= 1
-            if x == 0:
+            item_count -= 1
+            if item_count == 0:
                 return redirect ('invoice-detail', pk=pk)
 
-            i = x - 1
+            i = item_count - 1
             item = Item.objects.filter(invoice=object)[i]
             
             form = AddItemForm(instance=item)
@@ -186,17 +190,29 @@ def ApprovePayment(request, pk):
         invoice.set_second_CFO_approve()
         invoice.set_approved_date()
     return redirect('invoice-detail', pk=pk)
-    
-class InvoiceEditListView(ListView):
+
+
+class InvoiceEditListView(LoginRequiredMixin, ListView):
     model = InvoiceEdit
     template_name = 'invoice/invoice_edit_home.html'
     context_object_name = 'invoice_edits'
-    ordering = ['-original_invoice_id'] 
+    ordering = ['-original_invoice_id']
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceEditListView, self).get_context_data(**kwargs)
+        if is_CFO(self.request.user):
+            context['CFO'] = "CFO"
+        return context 
 
-class InvoiceEditDetailView(DetailView):
+class InvoiceEditDetailView(LoginRequiredMixin, DetailView):
     model = InvoiceEdit
-    template_name = 'invoice/invoice_edit_detail.html'
+    template_name = 'invoice/invoice_edit_detail.html'  
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceEditDetailView, self).get_context_data(**kwargs)
+        if is_CFO(self.request.user):
+            context['CFO'] = "CFO"
+        return context  
 
+@login_required
 def InvoiceEditRequest(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
     original_due_date = object.due_date
@@ -221,11 +237,12 @@ def InvoiceEditRequest(request, pk):
     return render(request, 'invoice/invoice_edit_request_form.html', context)
 
 
+@login_required
 def ItemEditRequest(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
-    global x
+    global item_count
 
-    i = x - 1
+    i = item_count - 1
     item = Item.objects.filter(invoice=object)[i]
     original_item = get_object_or_404(Item, pk=item.pk)
     original_item_invoice = object
@@ -240,13 +257,13 @@ def ItemEditRequest(request, pk):
         form = RequestItemEditForm(request.POST)
         if form.is_valid():
             form.save()
-            x -= 1
-            if x == 0:
+            item_count -= 1
+            if item_count == 0:
                 new_invoice_edit_request = InvoiceEdit.objects.all().last() # send notification to CFOs for edit request approval
                 new_invoice_edit_request.send_request_notification()
                 return redirect ('invoice-detail', pk=pk)
 
-            i = x - 1
+            i = item_count - 1
             item = Item.objects.filter(invoice=object)[i]
             original_item = get_object_or_404(Item, pk=item.pk)
             original_item_invoice = object
@@ -270,7 +287,9 @@ def ItemEditRequest(request, pk):
             "object": object,
         }
         return render(request, 'invoice/item_edit_request_form.html', context)
-    
+
+
+@login_required
 def ApproveInvoiceRequestEdit(request, pk):
     object = get_object_or_404(InvoiceEdit, pk=pk)
 
@@ -286,6 +305,8 @@ def ApproveInvoiceRequestEdit(request, pk):
 
     return redirect('invoice-edit-home')
 
+
+@login_required
 def DenyInvoiceRequestEdit(request, pk):
     object = InvoiceEdit.objects.get(pk=pk)
     item_edit_requests = ItemEdit.objects.filter(invoice_edit = object.pk)

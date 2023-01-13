@@ -21,9 +21,9 @@ class FOUploadInvoiceForm(forms.ModelForm):
             'date': "Date ",
             'due_date': 'Due Date ',
             'vendor': 'Vendor ',
-            'amount_charged': 'Subtotal ',
+            'amount_charged': 'Subtotal (RM)',
             'tax': 'Tax (%) ',
-            'amount_owed': 'Amount Owed ',
+            'amount_owed': 'Amount Owed (RM)',
         }
 
         widgets = { 
@@ -57,9 +57,9 @@ class CFOUploadInvoiceForm(forms.ModelForm):
             'date': "Date ",
             'due_date': 'Due Date ',
             'vendor': 'Vendor ',
-            'amount_charged': 'Subtotal ',
+            'amount_charged': 'Subtotal (RM)',
             'tax': 'Tax (%) ',
-            'amount_owed': 'Amount Owed ',
+            'amount_owed': 'Amount Owed (RM)',
         }
 
         widgets = { 
@@ -80,7 +80,6 @@ class AddItemForm(forms.ModelForm):
         model = Item
 
         fields = [
-            'invoice',
             'name',
             'unit_price',
             'quantity',
@@ -95,7 +94,6 @@ class AddItemForm(forms.ModelForm):
         }
 
         widgets = { 
-            'invoice' : forms.HiddenInput,
             'name' : forms.TextInput(attrs={'class' : 'form-control'}),
             'unit_price' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'quantity' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
