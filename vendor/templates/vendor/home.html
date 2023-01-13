@@ -18,13 +18,19 @@
         <tbody>
           {% for receipt in receipts %}
             <tr>
-              <td class="text-center"><a href="{% url 'vendor-home' vendor.pk %}" class="text-dark">{{receipt.receipt_id}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home' vendor.pk %}" class="text-dark">{{receipt.get_invoice_id}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home' vendor.pk %}" class="text-dark">{{receipt.date}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home' vendor.pk %}" class="text-dark">{{receipt.get_amount_paid}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{receipt.receipt_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{receipt.get_invoice_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{receipt.date}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{receipt.get_amount_paid}}</a></td>
               <td class="text-center">
-                <!-- <a class="btn button-yellow font-weight-bold border-0 text-center button py-2 px-3" href="{% url 'vendor-verify' %}">Verify</a> -->
-                <!-- <a class="btn button-red font-weight-bold border-0 text-center button py-2 px-3" href="{% url 'vendor-verify' %}">Deny</a> -->
+                <form action="verify/" method="POST">
+                    {% csrf_token %}
+                        <button class="btn button-yellow font-weight-bold border-0" type="submit">Verify</button>
+                </form>
+                <form action="deny/" method="POST">
+                    {% csrf_token %}
+                    <button class="btn button-yellow font-weight-bold border-0" type="submit">Deny</button>
+                </form>
               </td>
             </tr>
           {% endfor %}

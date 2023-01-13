@@ -62,3 +62,12 @@ def UpdatePayment(request, pk):
         'CFO' : "CFO",
     }
     return render(request,  'payment/payment_update_form.html', context)
+
+
+def verify(request, pk):
+    payment = Payment.objects.get(pk=pk)
+    if payment.set_verification_status == False:
+        payment.set_deny()
+    else:
+        payment.set_verify()
+    return redirect('payment-home', pk=pk)

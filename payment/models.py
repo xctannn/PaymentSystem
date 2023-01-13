@@ -10,6 +10,7 @@ class Payment(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
+    verification_status = models.BooleanField(default=False)
 
     def get_vendor_name(self):
         return self.vendor.name
@@ -32,3 +33,18 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.payment_id
+
+
+    def set_verify(self, request):
+        self.model.objects.payment_id().update(verification_status=True)
+        self.message_user(request, "Payment has been verify")
+
+    def set_deny(self, request):
+        self.model.objects.payment_id().update(verification_status=False)
+        self.message_user(request, "Payment has been deny")
+
+    def set_verification_status(self, verification_status):
+        self.verification_status = verification_status
+        self.save(update_fields=["verification_status"])
+
+    
