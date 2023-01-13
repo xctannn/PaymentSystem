@@ -20,7 +20,7 @@ class Receipt(models.Model):
         return self.invoice.invoice_id
     
     def get_amount_paid(self):
-        return self.invoice.amount_owned
+        return self.invoice.amount_owed
 
     def get_uploader_name(self):
         return (self.uploader.first_name + " " + self.uploader.last_name)

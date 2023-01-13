@@ -13,7 +13,7 @@ class FOUploadInvoiceForm(forms.ModelForm):
             'vendor',
             'amount_charged',
             'tax',
-            'amount_owned',
+            'amount_owed',
         ]
 
         labels = {
@@ -23,7 +23,7 @@ class FOUploadInvoiceForm(forms.ModelForm):
             'vendor': 'Vendor ',
             'amount_charged': 'Subtotal ',
             'tax': 'Tax (%) ',
-            'amount_owned': 'Amount Owned ',
+            'amount_owed': 'Amount Owed ',
         }
 
         widgets = { 
@@ -33,7 +33,7 @@ class FOUploadInvoiceForm(forms.ModelForm):
             'vendor' : forms.Select(attrs={'class' : 'form-control'}),
             'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
-            'amount_owned' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+            'amount_owed' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
         }
 
 class CFOUploadInvoiceForm(forms.ModelForm):
@@ -48,7 +48,7 @@ class CFOUploadInvoiceForm(forms.ModelForm):
             'vendor',
             'amount_charged',
             'tax',
-            'amount_owned',
+            'amount_owed',
             'department',
         ]
 
@@ -59,7 +59,7 @@ class CFOUploadInvoiceForm(forms.ModelForm):
             'vendor': 'Vendor ',
             'amount_charged': 'Subtotal ',
             'tax': 'Tax (%) ',
-            'amount_owned': 'Amount Owned ',
+            'amount_owed': 'Amount Owed ',
         }
 
         widgets = { 
@@ -69,7 +69,7 @@ class CFOUploadInvoiceForm(forms.ModelForm):
             'vendor' : forms.Select(attrs={'class' : 'form-control'}),
             'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
-            'amount_owned' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+            'amount_owed' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'department' : forms.Select(attrs={'class' : 'form-control'}),
         }
 
@@ -112,7 +112,7 @@ class UpdateInvoiceForm(forms.ModelForm):
             'vendor',
             'amount_charged',
             'tax',
-            'amount_owned',
+            'amount_owed',
         ]
 
         labels = {
@@ -121,7 +121,7 @@ class UpdateInvoiceForm(forms.ModelForm):
             'vendor': 'Vendor ',
             'amount_charged': 'Subtotal ',
             'tax': 'Tax (%) ',
-            'amount_owned': 'Amount Owned ',
+            'amount_owed': 'Amount Owed ',
         }
 
         widgets = { 
@@ -130,5 +130,5 @@ class UpdateInvoiceForm(forms.ModelForm):
             'vendor' : forms.Select(attrs={'class' : 'form-control'}),
             'amount_charged' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
             'tax' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
-            'amount_owned' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
+            'amount_owed' : forms.NumberInput(attrs={'class' : 'form-control', 'min': 0,}),
         }

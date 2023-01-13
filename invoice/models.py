@@ -9,7 +9,7 @@ class Invoice(models.Model):
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     amount_charged = models.DecimalField(max_digits=10, decimal_places=2)
     tax = models.IntegerField(null=True)
-    amount_owned = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_owed = models.DecimalField(max_digits=10, decimal_places=2)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
     department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
     first_CFO_approved = models.BooleanField(default=False)
