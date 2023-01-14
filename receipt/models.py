@@ -10,6 +10,7 @@ class Receipt(models.Model):
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
     department = models.CharField(max_length=50, choices=EmployeeProfile.Department.choices, blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_vendor_name(self):
         return self.vendor.name
@@ -43,6 +44,7 @@ class ReceiptEdit(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     editor = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, null=True, blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
     
     def get_vendor_name(self):
         return self.vendor.name

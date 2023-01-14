@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import EmployeeProfile, VendorProfile
 from invoice.models import Invoice
+from notification.models import Notification
 
 class Payment(models.Model):
     payment_id = models.CharField(max_length=20, primary_key=True)
@@ -9,6 +10,7 @@ class Payment(models.Model):
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
     verification_status = models.BooleanField(blank=True, null=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_vendor_name(self):
         return self.vendor.name
@@ -39,6 +41,23 @@ class Payment(models.Model):
     def deny(self):
         self.verification_status = False
         self.save(update_fields=["verification_status"])
+
+    def send_verification_request(self):
+        notify = Notification(payment=self, notification_type=4, vendor_receiver=self.vendor)
+        notify.save()
+
+    def send_verification_approval(self):
+        CFOs = EmployeeProfile.objects.filter(position='CFO')
+        for CFO in CFOs:
+            notify = Notification(payment=self, notification_type=5, success=True, employee_receiver=CFO)
+            notify.save()
+    
+    def send_verification_denial(self):
+        CFOs = EmployeeProfile.objects.filter(position='CFO')
+        for CFO in CFOs:
+            notify = Notification(payment=self, notification_type=5, success=False, employee_receiver=CFO)
+            notify.save()
+    
 
 
     

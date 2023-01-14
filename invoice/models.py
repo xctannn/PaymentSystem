@@ -16,6 +16,7 @@ class Invoice(models.Model):
     first_CFO_approved = models.BooleanField(default=False)
     second_CFO_approved = models.BooleanField(default=False)
     approved_date = models.DateField(null=True, blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_uploader_name(self):
         return (self.uploader.first_name + " " + self.uploader.last_name)
@@ -82,6 +83,7 @@ class Item(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
     
     def __str__(self):
         return self.name
@@ -98,6 +100,7 @@ class InvoiceEdit(models.Model):
     tax = models.IntegerField(null=True)
     amount_owed = models.DecimalField(max_digits=10, decimal_places=2)
     editor = models.ForeignKey(EmployeeProfile, on_delete=models.CASCADE, blank=True, null=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_department(self):
         return self.original_invoice_id.department
@@ -155,6 +158,7 @@ class ItemEdit(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    added_date = models.DateTimeField(auto_now_add=True, null=True)
     
     def edit_original_item(self):
         self.original_item_id.name = self.name
