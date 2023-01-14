@@ -32,10 +32,10 @@ class ReceiptListView(LoginRequiredMixin, ListView):
         return context
 
 
-class RecieptDetailView(LoginRequiredMixin, DetailView):
+class ReceiptDetailView(LoginRequiredMixin, DetailView):
     model = Receipt
     def get_context_data(self, **kwargs):
-        context = super(RecieptDetailView, self).get_context_data(**kwargs)
+        context = super(ReceiptDetailView, self).get_context_data(**kwargs)
         if is_CFO(self.request.user):
             context['CFO'] = "CFO"
         if is_FO(self.request.user):
@@ -63,7 +63,6 @@ class ReceiptCreateView(LoginRequiredMixin, TemplateView):
             added_receipt.set_uploader(employee)
             added_receipt.set_department()
             return redirect('receipt-home')
-
 
 @login_required
 def UpdateReceipt(request, pk):

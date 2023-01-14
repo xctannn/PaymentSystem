@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'payment.apps.PaymentConfig',
     'notification.apps.NotificationConfig',
+    'vendor.apps.VendorConfig',
     'crispy_forms',
     "bootstrap5",
     'django.contrib.admin',

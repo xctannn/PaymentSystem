@@ -1,0 +1,35 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="card mx-auto w-75 bg-light">
+    <div class="card-body">
+        <legend class="d-inline">Payment {{ object.payment_id }}</legend> 
+            <a href="{% url 'vendor-payment-home' %}" class="close float-right mr-3">
+                <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+            </a>
+        <br><hr>
+        <p>Paid Date : {{ object.date }}</p>
+        <p>Amount Paid : {{ object.get_amount_paid }}</p>
+        <p>Invoice ID: {{ object.get_invoice_id }}</p>
+        <p>Vendor : {{ object.get_vendor_name }}</p>
+        <pre>         {{ object.get_vendor_address }}</pre><br>
+        {% if object.verification_status == True %}
+            <small>Verfied</small>
+        {% endif %}
+        {% if object.verification_status == False %}
+            <small>Denied</small>
+        {% endif %}
+    </div>
+</div>
+<div class="text-center m-3 form-group">
+    {% if object.verification_status == null %}
+        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'vendor-payment-verify' object.pk %}"> 
+            Verify 
+        </a>
+        <a class="btn button-yellow font-weight-bold border-0 button py-2 px-5 mx-2" href="{% url 'vendor-payment-deny' object.pk %}"> 
+            Deny 
+        </a>
+    {% endif %}
+</div>
+{% endblock %}

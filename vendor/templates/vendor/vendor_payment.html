@@ -1,0 +1,41 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="m-5">
+  <h5 class="m-3 mt-5 font-weight-bold">Verification of Payment</h5>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm" cellspacing="0">
+        <thead class="bg-table-gray">
+            <tr>
+              <th class="text-center">Payment ID</th>
+              <th class="text-center">Invoice ID</th>
+              <th class="text-center">Vendor Name</th>
+              <th class="text-center">Paid Date</th>
+              <th class="text-center">Amount Paid</th>
+              <th class="text-center">Verification Status</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for payment in payments %}
+            <tr>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">{{payment.payment_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">{{payment.get_invoice_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">{{payment.get_vendor_name}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">{{payment.date}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">{{payment.get_amount_paid}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-detail' payment.pk %}" class="text-dark">
+                {% if payment.verification_status == True %}
+                    Verified
+                {% elif payment.verification_status == False %} 
+                    Denied
+                {% else %}
+                    To be Verfied
+                {% endif %}
+                </a></td>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+{% endblock %}

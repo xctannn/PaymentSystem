@@ -7,7 +7,9 @@ class MyLoginView(LoginView):
     
     def get_success_url(self):
         if self.request.user.groups.filter(name='Employee').exists():
-            return reverse_lazy('invoice-home') 
+            return reverse_lazy('invoice-home')
+        if self.request.user.groups.filter(name='Vendor').exists():
+            return reverse_lazy('vendor-payment-home') 
     
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
