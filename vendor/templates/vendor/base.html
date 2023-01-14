@@ -28,6 +28,7 @@
       </div>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="nav navbar-nav navbar-right">
+          <a href = "{% url 'vendor-notification-home' %}"><img class="nav-item nav-link bell" src="{% static 'bell.png' %}" ></a>
           <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href="{% url 'vendor-payment-home' %}">Payment</a>
           <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'vendor-receipt-home' %}">Receipt</a>
           <a class="nav-item nav-link" href = "{% url 'logout' %}" >Log Out</a>

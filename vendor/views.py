@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
+from notification.models import Notification
 from receipt.models import Receipt
 from payment.models import Payment
 from django.views.generic import ListView, DetailView
@@ -54,6 +55,7 @@ class VendorReceiptDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailVie
 def VerifyPayment(request, pk):
     object = get_object_or_404(Payment, pk=pk)
     object.verify()
+    object.send_verification_approval()
 
     return redirect('vendor-payment-home')
 
@@ -62,5 +64,17 @@ def VerifyPayment(request, pk):
 def DenyPayment(request, pk):
     object = Payment.objects.get(pk=pk)
     object.deny()
+    object.send_verification_denial()
 
     return redirect('vendor-payment-home')
+
+@login_required
+def GetVendorNotifications(request):
+    if is_vendor(request.user):
+        vendor = VendorProfile.objects.get(user = request.user)
+        notifications = Notification.objects.filter(vendor_receiver=vendor).order_by('-date') 
+        
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'vendor/notification_home.html', context)

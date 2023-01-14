@@ -40,7 +40,8 @@ class PaymentCreateView(LoginRequiredMixin, TemplateView):
         upload_payment_form = UploadPaymentForm(request.POST)
         if upload_payment_form.is_valid():
             upload_payment_form.save()
-            added_payment = Payment.objects.last()
+            added_payment = Payment.objects.latest('added_date')
             employee = EmployeeProfile.objects.get(user = self.request.user)
             added_payment.set_uploader(employee)
+            added_payment.send_verification_request()
             return redirect('payment-home')

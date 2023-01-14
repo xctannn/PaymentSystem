@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('payment/', VendorPaymentListView.as_view(), name = 'vendor-payment-home'),
     path('receipt/', VendorReceiptListView.as_view(), name = 'vendor-receipt-home'),
+    path('notifications/', views.GetVendorNotifications, name = 'vendor-notification-home'),
     path('payment/<pk>', VendorPaymentDetailView.as_view(), name = 'vendor-payment-detail'),
     path('receipt/<pk>', VendorReceiptDetailView.as_view(), name = 'vendor-receipt-detail'),
     path('payment/<pk>/verify', views.VerifyPayment, name = 'vendor-payment-verify'),
