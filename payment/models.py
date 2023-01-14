@@ -2,16 +2,13 @@ from django.db import models
 from account.models import EmployeeProfile, VendorProfile
 from invoice.models import Invoice
 
-
-# Create your models here.
-
 class Payment(models.Model):
     payment_id = models.CharField(max_length=20, primary_key=True)
     date = models.DateField()
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     uploader = models.ForeignKey(EmployeeProfile, on_delete=models.DO_NOTHING, blank=True, null=True)
-    verification_status = models.BooleanField(default=False)
+    verification_status = models.BooleanField(blank=True, null=True)
 
     def get_vendor_name(self):
         return self.vendor.name
@@ -34,7 +31,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.payment_id
-
 
     def verify(self):
         self.verification_status = True
