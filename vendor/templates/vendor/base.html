@@ -32,7 +32,7 @@
         <div class="nav navbar-nav navbar-right">
           <a class="nav-item nav-link {% if request.path == vendor %} active {% endif %}" href="{% url 'vendor-home' %}">Payment</a>
           <a class="nav-item nav-link {% if request.path == vendor %} active {% endif %}" href="{% url 'vendor-receipt' %}">Receipt</a>
-          <a class="nav-item nav-link" href = "#" >Log Out</a>
+          <a class="nav-item nav-link" href = "{% url 'logout' %}" >Log Out</a>
         </div> 
       </div>
     </nav>

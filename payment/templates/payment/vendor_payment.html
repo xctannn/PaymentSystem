@@ -18,15 +18,15 @@
         <tbody>
           {% for payment in payments %}
             <tr>
-              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{payment.payment_id}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{payment.get_invoice_id}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{payment.date}}</a></td>
-              <td class="text-center"><a href="{% url 'vendor-home'  %}" class="text-dark">{{payment.get_amount_paid}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-home'  %}" class="text-dark">{{payment.payment_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-home'  %}" class="text-dark">{{payment.get_invoice_id}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-home'  %}" class="text-dark">{{payment.date}}</a></td>
+              <td class="text-center"><a href="{% url 'vendor-payment-home'  %}" class="text-dark">{{payment.get_amount_paid}}</a></td>
               <td class="text-center">
                 <div class="d-flex justify-content-center">
-                        <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" href="{% url 'vendor-verify' payment.payment_id %}" type="submit">Verify</button>
+                        <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" href="{% url 'payment-verify' payment.payment_id %}" type="submit">Verify</button>
                 <div class="col-sm-1 col-xs-1 col-md-1 col-lg-1"></div>
-                    <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" href="{% url 'vendor-deny' payment.payment_id %}" type="submit">Deny</button>
+                    <button class="btn button button-yellow border-0 font-weight-bold py-2 px-3" href="{% url 'payment-deny' payment.payment_id %}" type="submit">Deny</button>
               </div>
               </td>
             </tr>

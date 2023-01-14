@@ -6,7 +6,7 @@ from invoice.models import Invoice
 # Create your models here.
 
 class Payment(models.Model):
-    payment_id = models.CharField(max_length=20, primary_key=True, related_name="payment_id")
+    payment_id = models.CharField(max_length=20, primary_key=True)
     date = models.DateField()
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)

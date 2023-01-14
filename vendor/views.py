@@ -7,7 +7,7 @@ def home(request):
     return render(request, 'vendor/home.html')
 
 
-class PaymentListView(ListView):
+class VendorPaymentListView(ListView):
     template_name = 'vendor/home.html'
     model= Payment
     context_object_name = 'payments'

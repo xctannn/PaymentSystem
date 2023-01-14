@@ -9,6 +9,11 @@ from account.models import EmployeeProfile
 def is_CFO(User):
     return User.groups.filter(name='CFO').exists()
 
+class VendorPaymentListView(ListView):
+    template_name = 'payment/vendor_payment.html'
+    model= Payment
+    context_object_name = 'payments'
+
 class PaymentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Payment
     template_name = 'payment/home.html'
