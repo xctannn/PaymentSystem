@@ -1,0 +1,19 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mx-auto w-75 bg-light">
+    <div class="card-body">
+        <legend class="d-inline">Receipt {{ object.receipt_id }}</legend> 
+            <a href="{% url 'vendor-receipt-home' %}" class="close float-right mr-3">
+                <button type="button" class="close"><span aria-hidden="true">&times;</span></button>
+            </a>
+        <hr>
+        <p>Paid Date : {{ object.date }}</p>
+        <p>Amount Paid : {{ object.get_amount_paid }}</p>
+        <p>Invoice ID: {{ object.get_invoice_id }}</p>
+        <p>Vendor : {{ object.get_vendor_name }}</p>
+        <pre>         {{ object.get_vendor_address }}</pre>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="m-5">
+    <h5 class="m-3 mt-5 font-weight-bold">Receipts</h5>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm" cellspacing="0">
+          <thead class="bg-table-gray">
+              <tr>
+                <th class="text-center">Receipt ID</th>
+                <th class="text-center">Invoice ID</th>
+                <th class="text-center">Vendor Name</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Amount Paid</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for receipt in receipts %}
+              <tr>
+                <td class="text-center"><a href="{% url 'vendor-receipt-detail' receipt.pk %}" class="text-dark">{{receipt.receipt_id}}</a></td>
+                <td class="text-center"><a href="{% url 'vendor-receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_invoice_id}}</a></td>
+                <td class="text-center"><a href="{% url 'vendor-receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_vendor_name}}</a></td>
+                <td class="text-center"><a href="{% url 'vendor-receipt-detail' receipt.pk %}" class="text-dark">{{receipt.date}}</a></td>
+                <td class="text-center"><a href="{% url 'vendor-receipt-detail' receipt.pk %}" class="text-dark">{{receipt.get_amount_paid}}</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
