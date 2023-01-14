@@ -140,6 +140,7 @@ class RequestInvoiceEditForm(forms.ModelForm):
     
         fields = [
             'original_invoice_id',
+            'date',
             'due_date',
             'vendor',
             'amount_charged',
@@ -149,6 +150,7 @@ class RequestInvoiceEditForm(forms.ModelForm):
 
         labels = {
             'original_invoice_id': 'Original Invoice ID',
+            'date': 'Issued Date ',
             'due_date': 'Due Date ',
             'vendor': 'Vendor ',
             'amount_charged': 'Subtotal ',

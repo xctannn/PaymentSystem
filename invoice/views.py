@@ -212,12 +212,13 @@ class InvoiceEditDetailView(LoginRequiredMixin, DetailView):
 @login_required
 def InvoiceEditRequest(request, pk):
     object = get_object_or_404(Invoice, pk=pk)
+    original_date = object.date
     original_due_date = object.due_date
     original_vendor = object.vendor
     original_amount_charged = object.amount_charged
     original_tax = object.tax
     original_amount_owed = object.amount_owed
-    intial_data = {'original_invoice_id': object, 'due_date': original_due_date, 'vendor': original_vendor, 'amount_charged': original_amount_charged, 'tax': original_tax, 'amount_owed': original_amount_owed}
+    intial_data = {'original_invoice_id': object, 'date': original_date, 'due_date': original_due_date, 'vendor': original_vendor, 'amount_charged': original_amount_charged, 'tax': original_tax, 'amount_owed': original_amount_owed}
     form = RequestInvoiceEditForm(initial=intial_data)
     getCount(object)
 

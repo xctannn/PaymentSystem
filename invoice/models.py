@@ -91,6 +91,7 @@ class Item(models.Model):
 
 class InvoiceEdit(models.Model):
     original_invoice_id = models.ForeignKey(Invoice, on_delete=models.CASCADE)
+    date = models.DateField(null=True)
     due_date = models.DateField()
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
     amount_charged = models.DecimalField(max_digits=10, decimal_places=2)
@@ -121,12 +122,13 @@ class InvoiceEdit(models.Model):
         self.save(update_fields=["editor"])
 
     def edit_original_invoice(self):
+        self.original_invoice_id.date = self.date
         self.original_invoice_id.due_date = self.due_date
         self.original_invoice_id.vendor = self.vendor
         self.original_invoice_id.amount_charged = self.amount_charged
         self.original_invoice_id.tax = self.tax
         self.original_invoice_id.amount_owed = self.amount_owed
-        self.original_invoice_id.save(update_fields=["due_date", "vendor", "amount_charged", "tax", "amount_owed"])
+        self.original_invoice_id.save(update_fields=["date","due_date", "vendor", "amount_charged", "tax", "amount_owed"])
 
     def __str__(self):
         return str(self.pk)
