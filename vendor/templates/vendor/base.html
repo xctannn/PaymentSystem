@@ -1,5 +1,6 @@
 {% load static %}
-{% url 'invoice-home' as invoice %}
+{% url 'vendor-payment-home' as payment %}
+{% url 'vendor-receipt-home' as receipt %}
 
 <!DOCTYPE html>
 <html>
@@ -12,26 +13,23 @@
 
   <link rel="stylesheet" href="{% static 'invoice/main.css' %}">
 
-    {% if title %}
-      <title>Payment System-{{ title }}</title>
-    {% else %}
-      <title>Payment System</title>
-    {% endif %}
+  <title>Payment System</title>
+
 </head>
 
 <body>
   <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-nav-gray fixed-top">
       <div class="container">
-        <a class="navbar-brand mr-4 font-weight-bold"">PAYMENT SYSTEM</a>
+        <a class="navbar-brand mr-4 font-weight-bold">PAYMENT SYSTEM</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
       <div class="collapse navbar-collapse" id="navbarToggle">
         <div class="nav navbar-nav navbar-right">
-          <a class="nav-item nav-link {% if request.path == vendor %} active {% endif %}" href="{% url 'vendor-home' %}">Payment</a>
-          <a class="nav-item nav-link {% if request.path == vendor %} active {% endif %}" href="{% url 'vendor-receipt' %}">Receipt</a>
+          <a class="nav-item nav-link {% if request.path == payment %} active {% endif %}" href="{% url 'vendor-payment-home' %}">Payment</a>
+          <a class="nav-item nav-link {% if request.path == receipt %} active {% endif %}" href="{% url 'vendor-receipt-home' %}">Receipt</a>
           <a class="nav-item nav-link" href = "{% url 'logout' %}" >Log Out</a>
         </div> 
       </div>
