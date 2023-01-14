@@ -9,11 +9,6 @@ from account.models import EmployeeProfile
 def is_CFO(User):
     return User.groups.filter(name='CFO').exists()
 
-class VendorPaymentListView(ListView):
-    template_name = 'payment/vendor_payment.html'
-    model= Payment
-    context_object_name = 'payments'
-
 class PaymentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Payment
     template_name = 'payment/home.html'
@@ -49,37 +44,3 @@ class PaymentCreateView(LoginRequiredMixin, TemplateView):
             employee = EmployeeProfile.objects.get(user = self.request.user)
             added_payment.set_uploader(employee)
             return redirect('payment-home')
-
-@login_required
-def UpdatePayment(request, pk):
-    object = get_object_or_404 (Payment, pk=pk)
-    form = UploadPaymentForm(instance=object)
-
-    if request.method == "POST":
-        form = UploadPaymentForm(request.POST, instance=object)
-        if form.is_valid():
-            form.save()
-            return redirect ('payment-detail', pk=pk)
-
-    context = {
-        "form": form,
-        "object": object,
-        'CFO' : "CFO",
-    }
-    return render(request,  'payment/payment_update_form.html', context)
-
-
-@login_required
-def VerifyPayment(request, pk):
-    object = get_object_or_404(Payment, pk=pk)
-    object.verify()
-
-    return redirect('invoice-home')
-
-
-@login_required
-def DenyPayment(request, pk):
-    object = Payment.objects.get(pk=pk)
-    object.deny()
-
-    return redirect('invoice-home')
