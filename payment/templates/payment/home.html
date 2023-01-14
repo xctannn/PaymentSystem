@@ -23,7 +23,7 @@
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_invoice_id}}</a></td>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.date}}</a></td>
               <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_amount_paid}}</a></td>
-              <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.date}}</a></td>
+              <td class="text-center"><a href="{% url 'payment-detail' payment.pk %}" class="text-dark">{{payment.get_vendor_name}}</a></td>
             </tr>
           {% endfor %}
         </tbody>
