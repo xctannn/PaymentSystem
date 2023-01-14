@@ -1,9 +1,6 @@
 from django.db import models
 from account.models import EmployeeProfile, VendorProfile
 from invoice.models import Invoice
-
-# Create your models here.
-
 class Payment(models.Model):
     payment_id = models.CharField(max_length=20, primary_key=True)
     date = models.DateField()
