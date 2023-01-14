@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from receipt.models import Receipt
+from payment.models import Payment
 from django.views.generic import ListView
 
 def home(request):
@@ -8,8 +9,8 @@ def home(request):
 
 class PaymentListView(ListView):
     template_name = 'vendor/home.html'
-    model= Receipt
-    context_object_name = 'receipts'
+    model= Payment
+    context_object_name = 'payments'
 
 class ReceiptListView(ListView):
     template_name = 'vendor/vendor_receipt.html'

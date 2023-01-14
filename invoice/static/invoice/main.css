@@ -19,6 +19,11 @@ body {
 	color:#1a2930;
 }
 
+.button-red{
+	background-color: #ff1616;
+	color:#ffffff;
+}
+
 .button-dark{
 	background-color: #c3beb6;
 }

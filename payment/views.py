@@ -64,10 +64,17 @@ def UpdatePayment(request, pk):
     return render(request,  'payment/payment_update_form.html', context)
 
 
-def verify(request, pk):
-    payment = Payment.objects.get(pk=pk)
-    if payment.set_verification_status == False:
-        payment.set_deny()
-    else:
-        payment.set_verify()
-    return redirect('payment-home', pk=pk)
+@login_required
+def VerifyPayment(request, pk):
+    object = get_object_or_404(Payment, pk=pk)
+    object.verify()
+
+    return redirect('invoice-home')
+
+
+@login_required
+def DenyPayment(request, pk):
+    object = Payment.objects.get(pk=pk)
+    object.deny()
+
+    return redirect('invoice-home')

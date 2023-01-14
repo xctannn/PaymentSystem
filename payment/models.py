@@ -2,10 +2,11 @@ from django.db import models
 from account.models import EmployeeProfile, VendorProfile
 from invoice.models import Invoice
 
+
 # Create your models here.
 
 class Payment(models.Model):
-    payment_id = models.CharField(max_length=20, primary_key=True)
+    payment_id = models.CharField(max_length=20, primary_key=True, related_name="payment_id")
     date = models.DateField()
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
     vendor = models.ForeignKey(VendorProfile, on_delete=models.DO_NOTHING)
@@ -35,16 +36,13 @@ class Payment(models.Model):
         return self.payment_id
 
 
-    def set_verify(self, request):
-        self.model.objects.payment_id().update(verification_status=True)
-        self.message_user(request, "Payment has been verify")
-
-    def set_deny(self, request):
-        self.model.objects.payment_id().update(verification_status=False)
-        self.message_user(request, "Payment has been deny")
-
-    def set_verification_status(self, verification_status):
-        self.verification_status = verification_status
+    def verify(self):
+        self.verification_status = True
         self.save(update_fields=["verification_status"])
+
+    def deny(self):
+        self.verification_status = False
+        self.save(update_fields=["verification_status"])
+
 
     
