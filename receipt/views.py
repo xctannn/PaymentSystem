@@ -58,7 +58,7 @@ class ReceiptCreateView(LoginRequiredMixin, TemplateView):
         upload_receipt_form = UploadReceiptForm(request.POST)
         if upload_receipt_form.is_valid():
             upload_receipt_form.save()
-            added_receipt = Receipt.objects.last()
+            added_receipt = Receipt.objects.latest('added_date')
             employee = EmployeeProfile.objects.get(user = self.request.user)
             added_receipt.set_uploader(employee)
             added_receipt.set_department()
@@ -118,7 +118,7 @@ def RequestReceiptEdit(request, pk):
         form = RequestReceiptEditForm(request.POST, initial=initial_data)
         if form.is_valid():
             form.save()
-            new_receipt_edit_request = ReceiptEdit.objects.all().last()
+            new_receipt_edit_request = ReceiptEdit.objects.latest('added_date')
             editor = EmployeeProfile.objects.get(user = request.user)
             new_receipt_edit_request.set_editor(editor)
             new_receipt_edit_request.send_request_notification()

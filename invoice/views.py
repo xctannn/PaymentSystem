@@ -68,7 +68,7 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
         if is_CFO(self.request.user):
             if CFO_upload_invoice_form.is_valid():
                 CFO_upload_invoice_form.save()
-                added_invoice = Invoice.objects.all().last()
+                added_invoice = Invoice.objects.latest('added_date')
                 employee = EmployeeProfile.objects.get(user = self.request.user)
                 added_invoice.set_uploader(employee)
                 context = {
@@ -81,7 +81,7 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
         if is_FO(self.request.user):
             if FO_upload_invoice_form.is_valid():
                 FO_upload_invoice_form.save()
-                added_invoice = Invoice.objects.all().last()
+                added_invoice = Invoice.objects.latest('added_date')
                 employee = EmployeeProfile.objects.get(user = self.request.user)
                 added_invoice.set_uploader(employee)
                 added_invoice.set_department()
@@ -97,7 +97,7 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
             unit_price = add_item_form.cleaned_data['unit_price']
             quantity = add_item_form.cleaned_data['quantity']
             total_price = add_item_form.cleaned_data['total_price']
-            added_invoice = Invoice.objects.all().last()
+            added_invoice = Invoice.objects.latest('added_date')
             item = Item.objects.create(invoice = added_invoice, name = name, unit_price = unit_price, quantity = quantity, total_price = total_price)
             item.save() 
             context = {
@@ -226,7 +226,7 @@ def InvoiceEditRequest(request, pk):
         form = RequestInvoiceEditForm(request.POST)
         if form.is_valid():
             form.save()
-            added_invoice_edit = InvoiceEdit.objects.all().last()
+            added_invoice_edit = InvoiceEdit.objects.latest('added_date')
             editor = EmployeeProfile.objects.get(user = request.user)
             added_invoice_edit.set_editor(editor)
             return redirect ('item-edit-request', pk=pk)
@@ -247,7 +247,7 @@ def ItemEditRequest(request, pk):
     item = Item.objects.filter(invoice=object)[i]
     original_item = get_object_or_404(Item, pk=item.pk)
     original_item_invoice = object
-    item_invoice_edit = InvoiceEdit.objects.all().last()
+    item_invoice_edit = InvoiceEdit.objects.latest('added_date')
     original_item_name = item.name
     original_item_unit_price = item.unit_price
     original_item__quantity = item.quantity
@@ -260,7 +260,7 @@ def ItemEditRequest(request, pk):
             form.save()
             item_count -= 1
             if item_count == 0:
-                new_invoice_edit_request = InvoiceEdit.objects.all().last() # send notification to CFOs for edit request approval
+                new_invoice_edit_request = InvoiceEdit.objects.latest('added_date')
                 new_invoice_edit_request.send_request_notification()
                 return redirect ('invoice-detail', pk=pk)
 
@@ -268,7 +268,7 @@ def ItemEditRequest(request, pk):
             item = Item.objects.filter(invoice=object)[i]
             original_item = get_object_or_404(Item, pk=item.pk)
             original_item_invoice = object
-            item_invoice_edit = InvoiceEdit.objects.all().last()
+            item_invoice_edit = InvoiceEdit.objects.latest('added_date')
             original_item_name = item.name
             original_item_unit_price = item.unit_price
             original_item__quantity = item.quantity
