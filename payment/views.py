@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .models import Payment
 from django.views.generic import ListView, DetailView, TemplateView
 from .forms import UploadPaymentForm 
@@ -20,12 +20,14 @@ class PaymentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return is_CFO(self.request.user)
 
 
-class PaymentDetailView(LoginRequiredMixin, DetailView):
+class PaymentDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Payment
     extra_context={"CFO": "CFO"}
 
+    def test_func(self):
+        return is_CFO(self.request.user)
 
-class PaymentCreateView(LoginRequiredMixin, TemplateView):    
+class PaymentCreateView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):    
     template_name =  'payment/payment_create_form.html'
     
     def get(self, request):
@@ -53,3 +55,6 @@ class PaymentCreateView(LoginRequiredMixin, TemplateView):
                 'CFO' : "CFO",
             }
             return render(request, self.template_name, context)
+
+    def test_func(self):
+        return is_CFO(self.request.user)
