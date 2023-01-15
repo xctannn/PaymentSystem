@@ -45,3 +45,11 @@ class PaymentCreateView(LoginRequiredMixin, TemplateView):
             added_payment.set_uploader(employee)
             added_payment.send_verification_request()
             return redirect('payment-home')
+
+        else:
+            context = {
+                'msg': "Invalid data keyed in.",
+                'UploadPaymentForm': UploadPaymentForm(),
+                'CFO' : "CFO",
+            }
+            return render(request, self.template_name, context)

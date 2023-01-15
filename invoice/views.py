@@ -71,6 +71,7 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
                 added_invoice = Invoice.objects.latest('added_date')
                 employee = EmployeeProfile.objects.get(user = self.request.user)
                 added_invoice.set_uploader(employee)
+                added_invoice.send_invoice_payment_request_notification_to_all_CFO()
                 context = {
                     'AddItemForm': AddItemForm(),
                     'added_invoice': added_invoice,
@@ -111,9 +112,13 @@ class InvoiceCreateView(LoginRequiredMixin, TemplateView):
 
         else:
             context = {
-                'msg': "Invalid detail keyed in.",
-                'UploadInvoiceForm': FOUploadInvoiceForm(),
+                'msg': "Invalid data keyed in.",
             }
+            if is_CFO(self.request.user):
+                context['CFO'] = "CFO"
+                context['UploadInvoiceForm'] = CFOUploadInvoiceForm()
+            if is_FO(self.request.user):
+                context['UploadInvoiceForm'] = FOUploadInvoiceForm()
             return render(request, self.template_name, context)
 
 item_count = 0
@@ -194,6 +199,7 @@ def ApprovePayment(request, pk):
             invoice.send_invoice_payment_request_notification_to_other_CFO(CFO)
     if invoice.first_CFO_approved == True and invoice.second_CFO_approved == True:
         invoice.set_approved_date()
+        invoice.send_invoice_payment_approval_notification()
     return redirect('invoice-detail', pk=pk)
 
 

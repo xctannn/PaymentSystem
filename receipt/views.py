@@ -64,6 +64,16 @@ class ReceiptCreateView(LoginRequiredMixin, TemplateView):
             added_receipt.set_department()
             return redirect('receipt-home')
 
+        else:
+            context = {
+                'msg': "Invalid data keyed in.",
+                'UploadReceiptForm': UploadReceiptForm(),
+            }
+            if is_CFO(self.request.user):
+                context['CFO'] = "CFO"
+            return render(request, self.template_name, context)
+
+
 @login_required
 def UpdateReceipt(request, pk):
     object = get_object_or_404(Receipt, pk=pk)
@@ -95,11 +105,11 @@ class ReceiptEditListView(LoginRequiredMixin, ListView):
             context['CFO'] = "CFO"
         return context 
 
-class RecieptEditDetailView(LoginRequiredMixin, DetailView):
+class ReceiptEditDetailView(LoginRequiredMixin, DetailView):
     model = ReceiptEdit
     template_name = 'receipt/receipt_edit_detail.html'
     def get_context_data(self, **kwargs):
-        context = super(RecieptEditDetailView, self).get_context_data(**kwargs)
+        context = super(ReceiptEditDetailView, self).get_context_data(**kwargs)
         if is_CFO(self.request.user):
             context['CFO'] = "CFO"
         return context  
