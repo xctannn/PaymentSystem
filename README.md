@@ -12,6 +12,9 @@ streamlining the process of invoice reception, payment approval and receipt docu
 
 
 ## To log in to Django AdministrationSite:
-Username: PaymentSystem
-Password: paysys123
+<ul>
+  <li>Username: PaymentSystem</li>
+  <li>Password: paysys123 </li>
+</ul>
+
 
